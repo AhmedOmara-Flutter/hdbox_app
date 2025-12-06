@@ -6,7 +6,6 @@ import 'package:hdbox_app/modules/full_details/photos_screen.dart';
 import 'package:hdbox_app/modules/full_details/trailer_screen.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../shared/components/buttons/action_button_item.dart';
 import '../../shared/components/buttons/build_play_button.dart';
 import '../../shared/components/cards/build_cast_item.dart';
