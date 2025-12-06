@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../../models/popular_network_model.dart';
 import '../../shared/components/buttons/build_action_button_row.dart';
 import '../../shared/components/cards/build_network_card.dart';
@@ -151,24 +150,6 @@ class HomeScreen extends StatelessWidget {
                   itemCount: popularNetworkModel.length,
                 ),
               ),
-              //Top Rated Movies
-              ConditionalBuilder(
-                condition: cubit.topRatedModel != null,
-                builder: (context) => MoviesHorizontalSection(
-                  title: 'Top Rated',
-                  onSeeAll: () {
-                    navigateTo(
-                      context,
-                      SeeAllScreen(
-                        title: 'Top Rated Movies',
-                        movies: cubit.topRatedModel!.results!,
-                      ),
-                    );
-                  },
-                  movies: cubit.topRatedModel!.results!,
-                ),
-                fallback: (context) => BuildFullBack(),
-              ),
               //Now Playing  Movies
               ConditionalBuilder(
                 condition: cubit.nowPlayingModel != null,
@@ -184,6 +165,24 @@ class HomeScreen extends StatelessWidget {
                     );
                   },
                   movies: cubit.nowPlayingModel!.results!,
+                ),
+                fallback: (context) => BuildFullBack(),
+              ),
+              //Top Rated Movies
+              ConditionalBuilder(
+                condition: cubit.topRatedModel != null,
+                builder: (context) => MoviesHorizontalSection(
+                  title: 'Top Rated',
+                  onSeeAll: () {
+                    navigateTo(
+                      context,
+                      SeeAllScreen(
+                        title: 'Top Rated Movies',
+                        movies: cubit.topRatedModel!.results!,
+                      ),
+                    );
+                  },
+                  movies: cubit.topRatedModel!.results!,
                 ),
                 fallback: (context) => BuildFullBack(),
               ),
