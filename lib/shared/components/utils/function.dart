@@ -1,0 +1,80 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../../styles/colors.dart';
+
+void navigateTo(
+  BuildContext context,
+  Widget screen, {
+  bool isReplacement = false,
+}) {
+  if (isReplacement) {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionDuration: Duration(milliseconds: 350),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+              opacity: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutQuart,
+              ),
+              child: child,
+            ),
+      ),
+    );
+  } else {
+    Navigator.push(
+      context,
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondaryAnimation) => screen,
+        transitionDuration: Duration(milliseconds: 350),
+        transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+            FadeTransition(
+              opacity: CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeOutQuart,
+              ),
+              child: child,
+            ),
+      ),
+    );
+  }
+}
+
+Widget shadowBellowPhoto({required double shadow}) {
+  return Container(
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.bottomCenter,
+        end: Alignment.topCenter,
+        colors: [
+          ColorManager.baseColor,
+          ColorManager.baseColor.withOpacity(shadow),
+          ColorManager.baseColor.withOpacity(0.1),
+          Colors.transparent,
+        ],
+      ),
+    ),
+  );
+}
+
+TextStyle style(double fontSize) {
+  return TextStyle(
+    color: ColorManager.white,
+    fontSize: fontSize,
+    fontWeight: FontWeight.bold,
+    height: 1.1,
+  );
+}
+
+formattedDate({required String date}) {
+  if (date == null || date.isEmpty) return "inValid date";
+  // try {
+  DateTime dateTime = DateTime.parse(date);
+  return DateFormat('MMMM d, yyyy').format(dateTime);
+  // } on Exception catch (e) {
+  //   return 'inValid date';
+  // }
+}
