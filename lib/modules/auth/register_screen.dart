@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -10,7 +11,11 @@ import '../../shared/styles/colors.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+  RegisterScreen({super.key});
+
+  var usernameController = TextEditingController();
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -90,23 +95,34 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 35),
                         BuildTextFormField(
+                          controller: usernameController,
                           icon: Icons.person,
                           label: "Username",
                         ),
                         const SizedBox(height: 18),
                         BuildTextFormField(
+                          controller: emailController,
                           icon: Icons.email_outlined,
                           label: "Email Address",
                         ),
                         const SizedBox(height: 18),
                         BuildTextFormField(
+                          controller: passwordController,
                           icon: Icons.password,
                           label: "Password",
                           isPassword: true,
                         ),
                         const SizedBox(height: 28),
                         BuildPlayButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            UserCredential user = await FirebaseAuth.instance
+                                .createUserWithEmailAndPassword(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                            print(user.user!.email);
+                            //print('token is ${user.credential!.token}');
+
                             navigateTo(context, LoginScreen());
                           },
                           label: 'Create Account',

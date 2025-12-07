@@ -4,11 +4,13 @@ class BuildTextFormField extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool isPassword;
+  final TextEditingController ?controller;
   const BuildTextFormField({
     super.key,
     required this.label,
     required this.icon,
     this.isPassword = false,
+    this.controller
   });
 
   @override
@@ -21,6 +23,7 @@ class BuildTextFormField extends StatelessWidget {
       ),
       child: TextField(
         obscureText: isPassword,
+        controller: controller,
         style: const TextStyle(color: Colors.white),
         cursorColor: Colors.redAccent,
         decoration: InputDecoration(

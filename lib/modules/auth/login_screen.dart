@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hdbox_app/modules/auth/register_screen.dart';
@@ -9,7 +10,10 @@ import '../../shared/components/utils/function.dart';
 import '../../shared/styles/colors.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+   LoginScreen({super.key});
+
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +93,13 @@ class LoginScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 35),
                         BuildTextFormField(
+                          controller: emailController,
                           label: "Email",
                           icon: Icons.email_outlined,
                         ),
                         const SizedBox(height: 18),
                         BuildTextFormField(
+                          controller: passwordController,
                           label: "Password",
                           icon: Icons.lock_outline_rounded,
                           isPassword: true,
@@ -112,7 +118,15 @@ class LoginScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 28),
                         BuildPlayButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            UserCredential user = await  FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                  email: emailController.text.toString(),
+                                  password: passwordController.text.toString(),
+                                );
+                            print(emailController.text);
+                            print(passwordController.text);
+                            print(user.user!.uid);
                             navigateTo(context, MoviesHomeLayout());
                           },
                           label: 'Login',
