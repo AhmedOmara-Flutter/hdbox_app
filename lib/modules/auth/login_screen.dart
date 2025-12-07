@@ -124,9 +124,6 @@ class LoginScreen extends StatelessWidget {
                                   email: emailController.text.toString(),
                                   password: passwordController.text.toString(),
                                 );
-                            print(emailController.text);
-                            print(passwordController.text);
-                            print(user.user!.uid);
                             navigateTo(context, MoviesHomeLayout());
                           },
                           label: 'Login',

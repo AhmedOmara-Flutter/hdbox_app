@@ -120,9 +120,6 @@ class RegisterScreen extends StatelessWidget {
                                   email: emailController.text,
                                   password: passwordController.text,
                                 );
-                            print(user.user!.email);
-                            //print('token is ${user.credential!.token}');
-
                             navigateTo(context, LoginScreen());
                           },
                           label: 'Create Account',
