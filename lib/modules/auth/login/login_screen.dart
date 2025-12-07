@@ -1,19 +1,17 @@
 import 'dart:ui';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hdbox_app/modules/auth/register/register_screen.dart';
+import '../../../layout/movies_homeLayout.dart';
+import '../../../shared/components/buttons/build_play_button.dart';
+import '../../../shared/components/forms/build_text_form_field.dart';
+import '../../../shared/components/utils/function.dart';
+import '../../../shared/styles/colors.dart';
 
-import '../../shared/components/buttons/build_play_button.dart';
-import '../../shared/components/forms/build_text_form_field.dart';
-import '../../shared/components/utils/function.dart';
-import '../../shared/styles/colors.dart';
-import 'login_screen.dart';
+class LoginScreen extends StatelessWidget {
+   LoginScreen({super.key});
 
-class RegisterScreen extends StatelessWidget {
-  RegisterScreen({super.key});
-
-  var usernameController = TextEditingController();
   var emailController = TextEditingController();
   var passwordController = TextEditingController();
 
@@ -77,9 +75,9 @@ class RegisterScreen extends StatelessWidget {
                     Column(
                       children: [
                         SizedBox(height: 100.0),
-                        Text(
-                          "Create Account",
-                          style: const TextStyle(
+                        const Text(
+                          "Welcome Back",
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -87,7 +85,7 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          "Join us & enjoy unlimited movies and shows.",
+                          "Login to continue watching your favorite movies.",
                           style: TextStyle(
                             color: Colors.white.withOpacity(0.7),
                             fontSize: 15,
@@ -95,41 +93,48 @@ class RegisterScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 35),
                         BuildTextFormField(
-                          controller: usernameController,
-                          icon: Icons.person,
-                          label: "Username",
-                        ),
-                        const SizedBox(height: 18),
-                        BuildTextFormField(
                           controller: emailController,
+                          label: "Email",
                           icon: Icons.email_outlined,
-                          label: "Email Address",
                         ),
                         const SizedBox(height: 18),
                         BuildTextFormField(
                           controller: passwordController,
-                          icon: Icons.password,
                           label: "Password",
+                          icon: Icons.lock_outline_rounded,
                           isPassword: true,
+                          type:TextInputType.phone,
+                        ),
+                        const SizedBox(height: 14),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            "Forgot Password?",
+                            style: TextStyle(
+                              color: ColorManager.red,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 28),
                         BuildPlayButton(
                           onPressed: () async {
-                            UserCredential user = await FirebaseAuth.instance
-                                .createUserWithEmailAndPassword(
-                                  email: emailController.text,
-                                  password: passwordController.text,
+                            UserCredential user = await  FirebaseAuth.instance
+                                .signInWithEmailAndPassword(
+                                  email: emailController.text.toString(),
+                                  password: passwordController.text.toString(),
                                 );
-                            navigateTo(context, LoginScreen());
+                            navigateTo(context, MoviesHomeLayout());
                           },
-                          label: 'Create Account',
+                          label: 'Login',
                         ),
                         const SizedBox(height: 25.0),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Already have an account? ',
+                              'Don’t have an account? ',
                               style: TextStyle(
                                 color: Colors.white.withOpacity(0.7),
                                 fontSize: 14,
@@ -137,10 +142,10 @@ class RegisterScreen extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () {
-                                navigateTo(context, LoginScreen());
+                                navigateTo(context, RegisterScreen());
                               },
                               child: Text(
-                                'Login',
+                                'Sign Up',
                                 style: TextStyle(
                                   color: ColorManager.red,
                                   fontWeight: FontWeight.bold,

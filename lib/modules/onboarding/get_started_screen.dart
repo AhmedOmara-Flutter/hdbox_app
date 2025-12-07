@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 
 import '../../shared/components/utils/function.dart';
 import '../../shared/styles/colors.dart';
-import '../auth/login_screen.dart';
-import '../auth/register_screen.dart';
+import '../auth/login/login_screen.dart';
+import '../auth/register/register_screen.dart';
 
 class GetStartedScreen extends StatelessWidget {
   const GetStartedScreen({super.key});

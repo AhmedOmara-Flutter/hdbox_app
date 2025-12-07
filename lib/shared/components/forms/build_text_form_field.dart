@@ -4,13 +4,16 @@ class BuildTextFormField extends StatelessWidget {
   final String label;
   final IconData icon;
   final bool isPassword;
-  final TextEditingController ?controller;
+  final TextEditingController? controller;
+  final TextInputType type;
+
   const BuildTextFormField({
     super.key,
     required this.label,
     required this.icon,
     this.isPassword = false,
-    this.controller
+    this.controller,
+    this.type = TextInputType.emailAddress,
   });
 
   @override
@@ -22,6 +25,7 @@ class BuildTextFormField extends StatelessWidget {
         border: Border.all(color: Colors.white.withOpacity(0.15)),
       ),
       child: TextField(
+        keyboardType: type,
         obscureText: isPassword,
         controller: controller,
         style: const TextStyle(color: Colors.white),
