@@ -17,6 +17,7 @@ import '../full_details/network_details_screen.dart';
 import '../full_details/see_all_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+
   const HomeScreen({super.key});
 
   @override
