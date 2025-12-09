@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'hdbox-app.firebasestorage.app',
     measurementId: 'G-HVMR85Z59T',
   );
+
 }

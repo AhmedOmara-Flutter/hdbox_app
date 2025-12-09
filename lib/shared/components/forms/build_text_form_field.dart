@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hdbox_app/shared/styles/colors.dart';
 
 class BuildTextFormField extends StatelessWidget {
   final String label;
@@ -6,6 +7,8 @@ class BuildTextFormField extends StatelessWidget {
   final bool isPassword;
   final TextEditingController? controller;
   final TextInputType type;
+  final IconData? suffixIcon;
+  final VoidCallback? suffixOnPressed;
 
   const BuildTextFormField({
     super.key,
@@ -14,6 +17,8 @@ class BuildTextFormField extends StatelessWidget {
     this.isPassword = false,
     this.controller,
     this.type = TextInputType.emailAddress,
+    this.suffixIcon,
+    this.suffixOnPressed,
   });
 
   @override
@@ -28,12 +33,16 @@ class BuildTextFormField extends StatelessWidget {
         keyboardType: type,
         obscureText: isPassword,
         controller: controller,
-        style: const TextStyle(color: Colors.white),
+        style: TextStyle(color: ColorManager.white),
         cursorColor: Colors.redAccent,
         decoration: InputDecoration(
           labelText: label,
-          labelStyle: TextStyle(color: Colors.white.withOpacity(0.6)),
-          prefixIcon: Icon(icon, color: Colors.white.withOpacity(0.7)),
+          labelStyle: TextStyle(color: ColorManager.white),
+          prefixIcon: Icon(icon, color: ColorManager.white),
+          suffixIcon: IconButton(
+            onPressed: suffixOnPressed,
+            icon: Icon(suffixIcon, color: ColorManager.white),
+          ),
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(vertical: 15),
         ),

@@ -34,7 +34,7 @@ class _HDSplashScreenState extends State<SplashScreen>
 
     _controller.forward();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      MoviesCubit.get(context).getAllData().then((value) {
+     MoviesCubit.get(context).getAllData().then((value) {
         Future.delayed(Duration(milliseconds: 2500), () {
           navigateTo(context, OnBoardingSlidesScreen());
         });

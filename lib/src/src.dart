@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hdbox_app/modules/splash/splash_screen.dart';
 import '../modules/auth/login/login_screen.dart';
 import '../shared/cubit/movies_cubit.dart';
 import '../shared/styles/colors.dart';
@@ -25,7 +26,7 @@ class AppRoot extends StatelessWidget {
             selectionHandleColor: ColorManager.white,
           ),
         ),
-        home: LoginScreen(),
+        home: SplashScreen(),
       ),
     );
   }

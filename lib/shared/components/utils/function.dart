@@ -69,12 +69,26 @@ TextStyle style(double fontSize) {
   );
 }
 
-formattedDate({required String date}) {
+String formattedDate({required String date}) {
   if (date == null || date.isEmpty) return "inValid date";
-  // try {
-  DateTime dateTime = DateTime.parse(date);
-  return DateFormat('MMMM d, yyyy').format(dateTime);
-  // } on Exception catch (e) {
-  //   return 'inValid date';
-  // }
+  try {
+    DateTime dateTime = DateTime.parse(date);
+    return DateFormat('MMMM d, yyyy').format(dateTime);
+  } on Exception catch (e) {
+    return 'inValid date';
+  }
+}
+
+ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnakeBar({
+  required BuildContext context,
+  required String label,
+  required Color color,
+}) {
+  return ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(label),
+      backgroundColor: color,
+      behavior: SnackBarBehavior.floating,
+    ),
+  );
 }
