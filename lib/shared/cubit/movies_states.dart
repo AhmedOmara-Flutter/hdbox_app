@@ -235,3 +235,13 @@ class MoviesGetVideoTVErrorData extends MoviesState {
 
   MoviesGetVideoTVErrorData({required this.error});
 }
+
+class GetUserDataLoadingState extends MoviesState {}
+
+class GetUserDataSuccessState extends MoviesState {}
+
+class GetUserDataErrorState extends MoviesState {
+  final String? error;
+
+  GetUserDataErrorState({required this.error});
+}

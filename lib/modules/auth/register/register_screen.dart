@@ -141,6 +141,7 @@ class RegisterScreen extends StatelessWidget {
                                    await cubit.userRegister(
                                       email: cubit.emailController.text,
                                       password: cubit.passwordController.text,
+                                     username: cubit.usernameController.text,
                                     );
                                   },
                                   label: 'Create Account',

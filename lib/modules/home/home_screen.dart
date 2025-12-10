@@ -57,7 +57,9 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       MovieCarousel(movies: cubit.trendingModel!.results!),
                       BuildActionButtonRow(
-                        myListPressed: () {},
+                        myListPressed: () {
+                          cubit.getUserFromFirebase();
+                        },
                         playPressed: () async {
                           await cubit.getVideoMoviesTrailerData(
                             id: cubit.carousalIndex,

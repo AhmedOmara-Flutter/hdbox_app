@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,11 +22,13 @@ import '../../models/top_search_model.dart';
 import '../../models/trending_model.dart';
 import '../../models/tv_movies_model.dart';
 import '../../models/upcoming_model.dart';
+import '../../models/user_model.dart';
 import '../../models/video_model.dart';
 import '../../modules/categories/categories_screen.dart';
 import '../../modules/home/home_screen.dart';
 import '../../modules/profile/profile_screen.dart';
 import '../../modules/search/search_screen.dart';
+import '../components/constants.dart';
 import '../network/end_points.dart';
 import '../network/remote/dio_helper.dart';
 import 'movies_states.dart';
@@ -556,5 +559,29 @@ class MoviesCubit extends Cubit<MoviesState> {
           emit(MoviesGetVideoTVErrorData(error: error.toString()));
           return null;
         });
+  }
+
+  ////////////////////////////////Get Users Data///////////////////////////////
+  UserModel? userModel;
+
+  void getUserFromFirebase()  {
+    emit(GetUserDataLoadingState());
+    if (Constants.uId != null && Constants.uId!.isNotEmpty) {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(Constants.uId)
+          .get()
+          .then((value) {
+            userModel = UserModel.fromJson(value.data()!);
+            print(Constants.uId);
+            print(userModel!.name);
+            print(value.data()!.length);
+            emit(GetUserDataSuccessState());
+          })
+          .catchError((error) {
+            emit(GetUserDataErrorState(error: error.toString()));
+            print(error);
+          });
+    }
   }
 }

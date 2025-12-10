@@ -33,13 +33,13 @@ class _HDSplashScreenState extends State<SplashScreen>
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
 
     _controller.forward();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-     MoviesCubit.get(context).getAllData().then((value) {
-        Future.delayed(Duration(milliseconds: 2500), () {
-          navigateTo(context, OnBoardingSlidesScreen());
-        });
-      });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //MoviesCubit.get(context).getAllData().then((value) {
+    Future.delayed(Duration(milliseconds: 2500), () {
+      navigateTo(context, OnBoardingSlidesScreen());
     });
+    //});
+    //});
   }
 
   @override
@@ -81,26 +81,31 @@ class _HDSplashScreenState extends State<SplashScreen>
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        "images/hd.png",
-                        width: 120,
-                        height: 120,
-                      ),
+                      Image.asset("images/hd.png", width: 120, height: 120),
                       const SizedBox(height: 20),
-                      AnimatedTextKit(
-                        animatedTexts: [
-                          WavyAnimatedText(
-                            'HD Box',
-                            textStyle: TextStyle(
-                              fontSize: 28.0,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                              letterSpacing: 1.2,
-                            ),
-                            speed: Duration(milliseconds: 200),
-                            // speed: Duration(milliseconds: 500),
-                          ),
-                        ],
+                      // AnimatedTextKit(
+                      //   animatedTexts: [
+                      //     WavyAnimatedText(
+                      //       'HD Box',
+                      //       textStyle: TextStyle(
+                      //         fontSize: 28.0,
+                      //         fontWeight: FontWeight.bold,
+                      //         color: Colors.white,
+                      //         letterSpacing: 1.2,
+                      //       ),
+                      //       speed: Duration(milliseconds: 200),
+                      //       // speed: Duration(milliseconds: 500),
+                      //     ),
+                      //   ],
+                      // ),
+                      Text(
+                        'HD Box',
+                        style: TextStyle(
+                          fontSize: 28.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 1.2,
+                        ),
                       ),
 
                       SizedBox(height: 8),

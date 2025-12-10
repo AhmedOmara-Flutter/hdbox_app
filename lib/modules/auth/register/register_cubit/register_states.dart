@@ -13,3 +13,13 @@ class RegisterErrorState extends InitialRegisterState {
 
   RegisterErrorState({required this.error});
 }
+
+class CreateUserLoadingState extends InitialRegisterState {}
+
+class CreateUserSuccessState extends InitialRegisterState {}
+
+class CreateUserErrorState extends InitialRegisterState {
+  final String error;
+
+  CreateUserErrorState({required this.error});
+}
