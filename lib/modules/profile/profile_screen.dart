@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:hdbox_app/models/user_model.dart';
 import 'package:hdbox_app/shared/components/layout/build_full_back.dart';
 import 'package:hdbox_app/shared/cubit/movies_cubit.dart';
 import 'package:hdbox_app/shared/cubit/movies_states.dart';

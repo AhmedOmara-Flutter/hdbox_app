@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hdbox_app/layout/movies_homeLayout.dart';
+import 'package:hdbox_app/modules/onboarding/get_started_screen.dart';
 import 'package:hdbox_app/modules/splash/splash_screen.dart';
 import '../shared/cubit/movies_cubit.dart';
 import '../shared/styles/colors.dart';
@@ -29,4 +31,15 @@ class AppRoot extends StatelessWidget {
       ),
     );
   }
+
+  // Widget startWidget({required String uId}) {
+  //   Widget? widget;
+  //   print(uId);
+  //   if (Constants.uId != null) {
+  //     widget = MoviesHomeLayout();
+  //   } else {
+  //     widget = SplashScreen();
+  //   }
+  //   return widget;
+  // }
 }
