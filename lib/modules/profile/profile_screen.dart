@@ -14,6 +14,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var cubit = MoviesCubit.get(context);
     cubit.getUserFromFirebase();
+
     return BlocConsumer<MoviesCubit, MoviesState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -21,10 +22,10 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, state) {
         final model = cubit.userModel;
         return Scaffold(
-          body: SingleChildScrollView(
-            child: ConditionalBuilder(
-              condition: model != null,
-              builder: (context) => Column(
+          body: ConditionalBuilder(
+            condition: model != null,
+            builder: (context) => SingleChildScrollView(
+              child: Column(
                 children: [
                   Container(
                     width: double.infinity,
@@ -92,8 +93,8 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              fallback: (context) => BuildFullBack(),
             ),
+            fallback: (context) => BuildFullBack(),
           ),
         );
       },

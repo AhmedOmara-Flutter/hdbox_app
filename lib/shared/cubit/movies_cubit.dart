@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../models/episode_model.dart';
 import '../../models/full_details_model/credits_details_model.dart';
 import '../../models/full_details_model/images_details_model.dart';
@@ -77,6 +76,7 @@ class MoviesCubit extends Cubit<MoviesState> {
       await getNowPlayingData();
       await getTrendingData();
       await getGenresList();
+     await getUserFromFirebase();
       emit(MoviesLoadedState());
     } catch (error) {
       emit(MoviesErrorState(error: error.toString()));
@@ -564,10 +564,10 @@ class MoviesCubit extends Cubit<MoviesState> {
   ////////////////////////////////Get Users Data///////////////////////////////
   UserModel? userModel;
 
-  void getUserFromFirebase()  {
+  Future<void> getUserFromFirebase() async {
     emit(GetUserDataLoadingState());
     if (Constants.uId != null && Constants.uId!.isNotEmpty) {
-      FirebaseFirestore.instance
+     return await FirebaseFirestore.instance
           .collection('users')
           .doc(Constants.uId)
           .get()
