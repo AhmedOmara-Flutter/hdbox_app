@@ -142,7 +142,7 @@ class OnBoardingSlidesScreen extends StatelessWidget {
                           child: MaterialButton(
                             onPressed: () {
                               if (cubit.isLast) {
-                                navigateTo(context, GetStartedScreen());
+                                navigateTo(context, GetStartedScreen(),isReplacement: true);
                               } else {
                                 cubit.pageController.nextPage(
                                   duration: Duration(milliseconds: 300),

@@ -30,7 +30,7 @@ class RegisterScreen extends StatelessWidget {
               label: 'Your account has been created successfully!',
               color: Colors.green,
             );
-            navigateTo(context, LoginScreen());
+            navigateTo(context, LoginScreen(),isReplacement: true);
           }
           if (state is RegisterErrorState) {
             showSnakeBar(
@@ -158,7 +158,7 @@ class RegisterScreen extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      navigateTo(context, LoginScreen());
+                                      navigateTo(context, LoginScreen(),isReplacement: true);
                                     },
                                     child: Text(
                                       'Login',

@@ -26,6 +26,7 @@ class LoginScreen extends StatelessWidget {
         listener: (context, state) {
           if (state is LoginSuccessState) {
             CacheHelper.saveData(key: 'uId', value: state.uId).then((value){
+              Constants.uId=state.uId;
               print(state.uId);
               print(value);
             });
@@ -34,7 +35,7 @@ class LoginScreen extends StatelessWidget {
               label: 'Welcome back! You are now logged in.',
               color: Colors.green,
             );
-            navigateTo(context, MoviesHomeLayout());
+            navigateTo(context, MoviesHomeLayout(),isReplacement: true);
           }
           if (state is LoginErrorState) {
             showSnakeBar(

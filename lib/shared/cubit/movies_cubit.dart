@@ -72,13 +72,13 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   Future<void> getAllData() async {
     try {
-     await getPopularData();
-     await  getTopRatedData();
-     await  getUpComingData();
-     await  getTopSearch();
-     await  getNowPlayingData();
-     await  getTrendingData();
-     await  getGenresList();
+      await getPopularData();
+      await getTopRatedData();
+      await getUpComingData();
+      await getTopSearch();
+      await getNowPlayingData();
+      await getTrendingData();
+      await getGenresList();
       emit(MoviesLoadedState());
     } catch (error) {
       emit(MoviesErrorState(error: error.toString()));
@@ -568,7 +568,7 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   Future<void> getUserFromFirebase() async {
     emit(GetUserDataLoadingState());
-    if (Constants.uId != null && Constants.uId!.isNotEmpty) {
+    if (Constants.uId.isNotEmpty) {
       return await FirebaseFirestore.instance
           .collection('users')
           .doc(Constants.uId)
@@ -583,5 +583,15 @@ class MoviesCubit extends Cubit<MoviesState> {
             print(error);
           });
     }
+  }
+
+  void resetUserModel() {
+    userModel = null;
+    emit(ResetUserModelState());
+  }
+
+  void resetCurrentIndex() {
+    currentIndex = 0;
+    emit(ResetCurrentIndexState());
   }
 }

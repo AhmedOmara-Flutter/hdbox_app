@@ -35,8 +35,8 @@ class _HDSplashScreenState extends State<SplashScreen>
     _controller.forward();
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //MoviesCubit.get(context).getAllData().then((value) {
-    Future.delayed(Duration(milliseconds: 2500), () {
-      navigateTo(context, OnBoardingSlidesScreen());
+    Future.delayed(Duration(milliseconds: 2800), () {
+      navigateTo(context, OnBoardingSlidesScreen(),isReplacement: true);
     });
     //});
     //});

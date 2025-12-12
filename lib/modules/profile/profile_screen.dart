@@ -1,13 +1,14 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hdbox_app/modules/onboarding/get_started_screen.dart';
 import 'package:hdbox_app/shared/components/effects/build_shimmer.dart';
-import 'package:hdbox_app/shared/components/layout/build_full_back.dart';
 import 'package:hdbox_app/shared/components/utils/function.dart';
 import 'package:hdbox_app/shared/cubit/movies_cubit.dart';
 import 'package:hdbox_app/shared/cubit/movies_states.dart';
+import 'package:hdbox_app/shared/styles/colors.dart';
+import '../../shared/network/local/cache_helper.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -35,6 +36,7 @@ class ProfileScreen extends StatelessWidget {
                       children: [
                         // Profile Image
                         CircleAvatar(
+                          backgroundColor: Color(0xff131313),
                           backgroundImage: NetworkImage(model!.image!),
                           radius: 55.0,
                         ),
@@ -54,9 +56,9 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ClipOval(child: BuildShimmer(height: 110, width: 110)),
-                        SizedBox(height: 15.0,),
+                        SizedBox(height: 15.0),
                         BuildShimmer(height: 12.0, width: 150.0),
-                        SizedBox(height: 10.0,),
+                        SizedBox(height: 10.0),
                         BuildShimmer(height: 12.0, width: 200.0),
                       ],
                     ),
@@ -81,7 +83,64 @@ class ProfileScreen extends StatelessWidget {
                     // Logout Button
                     Center(
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              backgroundColor: Color(0xff1a1a1a),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              title: Text(
+                                "Logout?",
+                                style: TextStyle(color: ColorManager.white),
+                              ),
+                              content: Text(
+                                "Are you sure you want to log out?",
+                                style: TextStyle(color: ColorManager.lightGray),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text(
+                                    "Cancel",
+                                    style: TextStyle(
+                                      color: ColorManager.lightGray,
+                                    ),
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    CacheHelper.removeData(key: 'uId').then((
+                                      value,
+                                    ) {
+                                      if (value == true) {
+                                        showSnakeBar(
+                                          context: context,
+                                          label: 'Logout Successfully',
+                                          color: Colors.green,
+                                        );
+                                      }
+                                      cubit.resetCurrentIndex();
+                                      cubit.resetUserModel();
+                                      cubit.userModel = null;
+
+                                      navigateTo(
+                                        context,
+                                        GetStartedScreen(),
+                                        isReplacement: true,
+                                      );
+                                    });
+                                  },
+                                  child: Text(
+                                    "Log Out",
+                                    style: TextStyle(color: ColorManager.red),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                         child: Text(
                           "Log Out",
                           style: GoogleFonts.poppins(

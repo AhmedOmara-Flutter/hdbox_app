@@ -15,6 +15,7 @@ class CacheHelper {
     if (value is int) return await sharedPreferences!.setInt(key, value);
     if (value is double) return await sharedPreferences!.setDouble(key, value);
     return await sharedPreferences!.setBool(key, value);
+
   }
 
   static  getData({required String key}) {
