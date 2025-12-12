@@ -10,6 +10,7 @@ import '../../models/full_details_model/similar_details_tv_model.dart';
 import '../../models/genres_data_model.dart';
 import '../../models/genres_list_model.dart';
 import '../../models/movie_detail_model.dart';
+import '../../models/multi_search_model.dart';
 import '../../models/network_model.dart';
 import '../../models/now_playing_model.dart';
 import '../../models/onboarding_model.dart';
@@ -168,7 +169,7 @@ class MoviesCubit extends Cubit<MoviesState> {
         });
   }
 
-  //////////////////////////////////Now Playing Data///////////////////////////////
+  //////////////////////////////////Trending Data///////////////////////////////
 
   TrendingModel? trendingModel;
 
@@ -216,22 +217,44 @@ class MoviesCubit extends Cubit<MoviesState> {
   }
 
   //////////////////////////////////Search Data///////////////////////////////
+  //
+  // SearchModel? searchModel;
+  //
+  // void getSearch({required String q}) {
+  //   emit(MoviesGetSearchLoadingData());
+  //   DioHelper.getData(
+  //         url: SEARCH,
+  //         query: {'api_key': 'a497f504b6673dad3325dbad736632a0', 'query': q},
+  //       )
+  //       .then((value) {
+  //         searchModel = SearchModel.fromJson(value.data);
+  //         emit(MoviesGetSearchSuccessData());
+  //       })
+  //       .catchError((error) {
+  //         print(error);
+  //         emit(MoviesGetSearchErrorData(error: error.toString()));
+  //       });
+  // }
 
-  SearchModel? searchModel;
+  MultiSearchModel? multiSearchModel;
 
-  void getSearch({required String q}) {
-    emit(MoviesGetSearchLoadingData());
+  void getMultiSearch({required String q}) {
+    emit(MoviesGetMultiSearchLoadingData());
     DioHelper.getData(
-          url: SEARCH,
+          url: 'search/multi',
           query: {'api_key': 'a497f504b6673dad3325dbad736632a0', 'query': q},
         )
         .then((value) {
-          searchModel = SearchModel.fromJson(value.data);
-          emit(MoviesGetSearchSuccessData());
+          multiSearchModel = MultiSearchModel.fromJson(value.data);
+          multiSearchModel!.results!.removeWhere(
+            (element) => element.mediaType == 'person',
+          );
+
+          emit(MoviesGetMultiSearchSuccessData());
         })
         .catchError((error) {
           print(error);
-          emit(MoviesGetSearchErrorData(error: error.toString()));
+          emit(MoviesGetMultiSearchErrorData(error: error.toString()));
         });
   }
 

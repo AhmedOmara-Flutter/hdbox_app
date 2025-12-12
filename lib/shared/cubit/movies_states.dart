@@ -245,6 +245,19 @@ class GetUserDataErrorState extends MoviesState {
 
   GetUserDataErrorState({required this.error});
 }
+
 class ResetCurrentIndexState extends MoviesState {}
+
 class ResetUserModelState extends MoviesState {}
+
 class ClearUserModelState extends MoviesState {}
+
+class MoviesGetMultiSearchLoadingData extends MoviesState {}
+
+class MoviesGetMultiSearchSuccessData extends MoviesState {}
+
+class MoviesGetMultiSearchErrorData extends MoviesState {
+  final String? error;
+
+  MoviesGetMultiSearchErrorData({required this.error});
+}

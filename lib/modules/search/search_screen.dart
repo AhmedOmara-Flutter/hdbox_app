@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,7 @@ import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
 import '../../shared/styles/colors.dart';
 import '../full_details/full_details_movies_screen.dart';
+import '../full_details/full_details_tv_movies_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
@@ -21,13 +24,13 @@ class SearchScreen extends StatelessWidget {
       },
       builder: (context, state) {
         String formatedYearDate({required String date}) {
-          if (date == null || date.isEmpty) return "inValid date";
+          if (date == null || date.isEmpty) return "Unknown year";
           try {
             DateTime dateTime = DateTime.parse(date);
             String formatedDate = dateTime.year.toString();
             return formatedDate;
           } catch (e) {
-            return 'inValid date';
+            return 'Unknown year';
           }
         }
 
@@ -72,39 +75,43 @@ class SearchScreen extends StatelessWidget {
                       ),
                       style: TextStyle(color: ColorManager.white),
                       onChanged: (value) {
-                        cubit.getSearch(q: value);
+                        cubit.getMultiSearch(q: value);
                         cubit.searchText = value;
                       },
                     ),
                   ),
                   if (cubit.searchText.isNotEmpty)
                     ConditionalBuilder(
-                      condition: cubit.searchModel != null,
+                      condition: cubit.multiSearchModel != null,
                       builder: (context) => Expanded(
                         child: ListView.builder(
-                          itemBuilder: (context, index) => SearchInfoRow(
-                            onTap: () {
-                              navigateTo(
-                                context,
-                                FullDetailsMoviesScreen(
-                                  movieId:
-                                      cubit.searchModel!.results![index].id!,
-                                ),
-                              );
-                            },
-                            title:
-                                cubit.searchModel!.results![index].title ??
-                                'No Title',
-                            date: formatedYearDate(
-                              date:
-                                  cubit
-                                      .searchModel!
-                                      .results![index]
-                                      .releaseDate ??
-                                  'inValid Date',
-                            ),
-                          ),
-                          itemCount: cubit.searchModel!.results!.length,
+                          itemBuilder: (context, index) {
+                            final movie =
+                                cubit.multiSearchModel!.results![index];
+
+                            return SearchInfoRow(
+                              onTap: () {
+                                if (movie.isMovie) {
+                                  navigateTo(
+                                    context,
+                                    FullDetailsMoviesScreen(movieId: movie.id!),
+                                  );
+                                } else if (movie.isTv) {
+                                  navigateTo(
+                                    context,
+                                    FullDetailsTvMoviesScreen(
+                                      movieId: movie.id!,
+                                    ),
+                                  );
+                                }
+                              },
+                              title: movie.displayTitle,
+                              date: formatedYearDate(
+                                date: movie.displayDate,
+                              ),
+                            );
+                          },
+                          itemCount: cubit.multiSearchModel!.results!.length,
                         ),
                       ),
                       fallback: (context) => Center(
