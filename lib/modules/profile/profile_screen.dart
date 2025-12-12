@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hdbox_app/shared/components/effects/build_shimmer.dart';
 import 'package:hdbox_app/shared/components/layout/build_full_back.dart';
+import 'package:hdbox_app/shared/components/utils/function.dart';
 import 'package:hdbox_app/shared/cubit/movies_cubit.dart';
 import 'package:hdbox_app/shared/cubit/movies_states.dart';
 
@@ -12,7 +15,6 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var cubit = MoviesCubit.get(context);
-    cubit.getUserFromFirebase();
 
     return BlocConsumer<MoviesCubit, MoviesState>(
       listener: (context, state) {
@@ -21,79 +23,80 @@ class ProfileScreen extends StatelessWidget {
       builder: (context, state) {
         final model = cubit.userModel;
         return Scaffold(
-          body: ConditionalBuilder(
-            condition: model != null,
-            builder: (context) => SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                ConditionalBuilder(
+                  condition: model != null,
+                  builder: (context) => Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.only(top: 60, bottom: 15),
+                    padding: const EdgeInsets.only(top: 60),
                     child: Column(
                       children: [
                         // Profile Image
                         CircleAvatar(
-                          radius: 55,
-                          backgroundImage: NetworkImage('${model!.image}'),
+                          backgroundImage: NetworkImage(model!.image!),
+                          radius: 55.0,
                         ),
                         const SizedBox(height: 15),
                         // Username
-                        Text(
-                          "${model.name}",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 22,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        Text("${model.name}", style: style(17.0)),
+                        SizedBox(height: 5.0),
                         // Email
-                        Text(
-                          "${model.email}",
-                          style: GoogleFonts.poppins(
-                            color: Colors.white70,
-                            fontSize: 14,
-                          ),
-                        ),
+                        Text("${model.email}", style: style(13.0)),
                       ],
                     ),
                   ),
-                  ListView(
-                    physics: NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    children: [
-                      _buildOption(icon: Icons.settings, title: "Settings"),
-                      _buildOption(icon: Icons.lock, title: "Privacy"),
-                      _buildOption(icon: Icons.movie, title: "My Watchlist"),
-                      _buildOption(
-                        icon: Icons.notifications,
-                        title: "Notifications",
-                      ),
-                      _buildOption(
-                        icon: Icons.help_outline,
-                        title: "Help & Support",
-                      ),
-                      const SizedBox(height: 20),
-                      // Logout Button
-                      Center(
-                        child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "Log Out",
-                            style: GoogleFonts.poppins(
-                              color: Colors.redAccent,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
+                  fallback: (context) => Container(
+                    margin: EdgeInsets.only(top: 20.0),
+                    height: 200.0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ClipOval(child: BuildShimmer(height: 110, width: 110)),
+                        SizedBox(height: 15.0,),
+                        BuildShimmer(height: 12.0, width: 150.0),
+                        SizedBox(height: 10.0,),
+                        BuildShimmer(height: 12.0, width: 200.0),
+                      ],
+                    ),
+                  ),
+                ),
+                ListView(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  children: [
+                    _buildOption(icon: Icons.settings, title: "Settings"),
+                    _buildOption(icon: Icons.lock, title: "Privacy"),
+                    _buildOption(icon: Icons.movie, title: "My Watchlist"),
+                    _buildOption(
+                      icon: Icons.notifications,
+                      title: "Notifications",
+                    ),
+                    _buildOption(
+                      icon: Icons.help_outline,
+                      title: "Help & Support",
+                    ),
+                    const SizedBox(height: 20),
+                    // Logout Button
+                    Center(
+                      child: TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          "Log Out",
+                          style: GoogleFonts.poppins(
+                            color: Colors.redAccent,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 30),
-                    ],
-                  ),
-                ],
-              ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
+                ),
+              ],
             ),
-            fallback: (context) => BuildFullBack(),
           ),
         );
       },

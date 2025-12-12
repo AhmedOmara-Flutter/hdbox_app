@@ -7,6 +7,7 @@ import 'package:hdbox_app/modules/auth/login/login_cubit/login_cubit.dart';
 import 'package:hdbox_app/modules/auth/login/login_cubit/login_states.dart';
 import 'package:hdbox_app/modules/auth/register/register_screen.dart';
 import 'package:hdbox_app/shared/components/layout/build_full_back.dart';
+import 'package:hdbox_app/shared/network/local/cache_helper.dart';
 import '../../../layout/movies_homeLayout.dart';
 import '../../../shared/components/buttons/build_play_button.dart';
 import '../../../shared/components/constants.dart';
@@ -24,7 +25,10 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            Constants.uId = state.uId;
+            CacheHelper.saveData(key: 'uId', value: state.uId).then((value){
+              print(state.uId);
+              print(value);
+            });
             showSnakeBar(
               context: context,
               label: 'Welcome back! You are now logged in.',

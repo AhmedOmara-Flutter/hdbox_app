@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../layout/movies_homeLayout.dart';
+import '../../../modules/splash/splash_screen.dart';
 import '../../styles/colors.dart';
 
 void navigateTo(
@@ -91,4 +93,15 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnakeBar({
       behavior: SnackBarBehavior.floating,
     ),
   );
+}
+
+Widget startWidget({required String uId}) {
+  Widget? widget;
+  print(uId);
+  if (uId.isNotEmpty) {
+    widget = MoviesHomeLayout();
+  } else {
+    widget = SplashScreen();
+  }
+  return widget;
 }

@@ -58,6 +58,9 @@ class MoviesCubit extends Cubit<MoviesState> {
   ];
 
   void changeBottomNavBar(int index) {
+    if (index == 3) {
+      getUserFromFirebase();
+    }
     currentIndex = index;
     emit(ChangeBottomNavBarState());
   }
@@ -69,14 +72,13 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   Future<void> getAllData() async {
     try {
-      await getPopularData();
-      await getTopRatedData();
-      await getUpComingData();
-      await getTopSearch();
-      await getNowPlayingData();
-      await getTrendingData();
-      await getGenresList();
-     await getUserFromFirebase();
+     await getPopularData();
+     await  getTopRatedData();
+     await  getUpComingData();
+     await  getTopSearch();
+     await  getNowPlayingData();
+     await  getTrendingData();
+     await  getGenresList();
       emit(MoviesLoadedState());
     } catch (error) {
       emit(MoviesErrorState(error: error.toString()));
@@ -567,16 +569,14 @@ class MoviesCubit extends Cubit<MoviesState> {
   Future<void> getUserFromFirebase() async {
     emit(GetUserDataLoadingState());
     if (Constants.uId != null && Constants.uId!.isNotEmpty) {
-     return await FirebaseFirestore.instance
+      return await FirebaseFirestore.instance
           .collection('users')
           .doc(Constants.uId)
           .get()
           .then((value) {
             userModel = UserModel.fromJson(value.data()!);
-            print(Constants.uId);
-            print(userModel!.name);
-            print(value.data()!.length);
             emit(GetUserDataSuccessState());
+            print(value.data()!.length);
           })
           .catchError((error) {
             emit(GetUserDataErrorState(error: error.toString()));

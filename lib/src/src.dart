@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hdbox_app/layout/movies_homeLayout.dart';
-import 'package:hdbox_app/modules/onboarding/get_started_screen.dart';
 import 'package:hdbox_app/modules/splash/splash_screen.dart';
+import '../layout/movies_homeLayout.dart';
+import '../shared/components/utils/function.dart';
 import '../shared/cubit/movies_cubit.dart';
 import '../shared/styles/colors.dart';
 
 class AppRoot extends StatelessWidget {
-  const AppRoot({super.key});
+  final String uId;
+
+  const AppRoot({super.key, required this.uId});
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +29,8 @@ class AppRoot extends StatelessWidget {
             selectionHandleColor: ColorManager.white,
           ),
         ),
-        home: SplashScreen(),
+        home: startWidget(uId: uId),
       ),
     );
   }
-
-  // Widget startWidget({required String uId}) {
-  //   Widget? widget;
-  //   print(uId);
-  //   if (Constants.uId != null) {
-  //     widget = MoviesHomeLayout();
-  //   } else {
-  //     widget = SplashScreen();
-  //   }
-  //   return widget;
-  // }
 }
