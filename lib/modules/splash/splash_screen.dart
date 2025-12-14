@@ -33,9 +33,12 @@ class _HDSplashScreenState extends State<SplashScreen>
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
 
     _controller.forward();
+    //todo خلي بالك من دي
     // WidgetsBinding.instance.addPostFrameCallback((_) {
     //MoviesCubit.get(context).getAllData().then((value) {
-    Future.delayed(Duration(milliseconds: 2800), () {
+    // todo ودي كمان من غيرها emulator مش هيشتغل
+    if (!mounted) return;
+    Future.delayed(Duration(milliseconds: 4000), () {
       navigateTo(context, OnBoardingSlidesScreen(),isReplacement: true);
     });
     //});

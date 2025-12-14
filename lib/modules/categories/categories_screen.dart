@@ -8,7 +8,7 @@ import '../../shared/cubit/movies_states.dart';
 import '../full_details/genres_details_screen.dart';
 
 class CategoriesScreen extends StatelessWidget {
-  CategoriesScreen({super.key});
+  const CategoriesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,50 +33,48 @@ class CategoriesScreen extends StatelessWidget {
                   ),
                 ),
 
-                body: Container(
-                  child: GridView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: cubit.genresListModel!.genres!.length,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 18,
-                          mainAxisSpacing: 18,
-                          childAspectRatio: 1.1,
+                body: GridView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: cubit.genresListModel!.genres!.length,
+                  gridDelegate:
+                      const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 18,
+                        mainAxisSpacing: 18,
+                        childAspectRatio: 1.1,
+                      ),
+
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        navigateTo(
+                          context,
+                          GenresDetailsScreen(
+                            id: cubit.genresListModel!.genres![index].id!,
+                            genres:
+                                cubit.genresListModel!.genres![index].name!,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(26),
+                          color: Colors.grey.shade700,
                         ),
 
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          navigateTo(
-                            context,
-                            GenresDetailsScreen(
-                              id: cubit.genresListModel!.genres![index].id!,
-                              genres:
-                                  cubit.genresListModel!.genres![index].name!,
-                            ),
-                          );
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(26),
-                            color: Colors.grey.shade700,
-                          ),
-
-                          child: Center(
-                            child: Text(
-                              cubit.genresListModel!.genres![index].name!,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.w700,
-                              ),
+                        child: Center(
+                          child: Text(
+                            cubit.genresListModel!.genres![index].name!,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               )
             : BuildFullBack();

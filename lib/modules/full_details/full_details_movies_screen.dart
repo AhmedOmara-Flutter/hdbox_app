@@ -82,6 +82,7 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                         style: style(14.0),
                         trimMode: TrimMode.Line,
                         trimLines: 3,
+
                         trimCollapsedText: "See More",
                         trimExpandedText: "See Less",
                         colorClickableText: ColorManager.blue,
@@ -94,24 +95,31 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                             ActionButtonItem(
                               label: 'Trailer',
                               icon: Icons.movie_creation_outlined,
-                              onTap: () {
+                              onPressed: () {
                                 navigateTo(context, TrailerScreen(id: movieId));
                               },
                             ),
                             ActionButtonItem(
                               label: 'My List',
-                              icon: Icons.add,
-                              onTap: () {},
+                              icon:cubit.isLoaded==true?Icons.bookmark_outlined:Icons.bookmark_border,
+                              onPressed: () {
+                                cubit.addToWatchList(
+                                  movieId: cubit.detailsModel!.id!,
+                                  name: cubit.detailsModel!.title??'',
+                                  mediaType: 'movie',
+                                  image: cubit.detailsModel!.posterPath??''
+                                );
+                              },
                             ),
                             ActionButtonItem(
                               label: 'Share',
                               icon: Icons.share,
-                              onTap: () {},
+                              onPressed: () {},
                             ),
                             ActionButtonItem(
                               label: 'Photos',
                               icon: Icons.photo,
-                              onTap: () {
+                              onPressed: () {
                                 navigateTo(context, PhotosScreen(id: movieId));
                               },
                             ),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hdbox_app/models/watchlist_model.dart';
 import '../../models/episode_model.dart';
 import '../../models/full_details_model/credits_details_model.dart';
 import '../../models/full_details_model/images_details_model.dart';
@@ -616,5 +617,59 @@ class MoviesCubit extends Cubit<MoviesState> {
   void resetCurrentIndex() {
     currentIndex = 0;
     emit(ResetCurrentIndexState());
+  }
+
+  ////////////////////////////////Add to Watchlist ///////////////////////////////
+  bool isLoaded = false;
+  List<WatchlistModel> watchlist = [];
+
+  Future<void> addToWatchList({
+    required int movieId,
+    required String mediaType,
+    required String name,
+    required String image,
+  }) async {
+    emit(AddToWatchListLoadingState());
+    isLoaded = false;
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Constants.uId)
+        .collection('watchlist')
+        .doc('${mediaType}_$movieId')
+        .set({
+          'name': name,
+          'movieId': movieId,
+          'mediaType': mediaType,
+          'image': image,
+          'addedAt': FieldValue.serverTimestamp(),
+        })
+        .then((value) {
+          isLoaded = true;
+          emit(AddToWatchListSuccessState());
+        })
+        .catchError((error) {
+          emit(AddToWatchListErrorState(error: error.toString()));
+        });
+  }
+
+  Future<void> getWatchList() async {
+    emit(GetWatchListLoadingState());
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Constants.uId)
+        .collection('watchlist')
+        .orderBy('addedAt', descending: false)
+        .get()
+        .then((value) {
+          value.docs.forEach((element) {
+            watchlist.add(WatchlistModel.fromJson(element.data()));
+          });
+          emit(GetWatchListSuccessState());
+        })
+        .catchError((error) {
+          emit(GetWatchListErrorState(error: error.toString()));
+        });
   }
 }

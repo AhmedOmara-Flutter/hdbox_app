@@ -9,6 +9,7 @@ import 'package:hdbox_app/shared/cubit/movies_cubit.dart';
 import 'package:hdbox_app/shared/cubit/movies_states.dart';
 import 'package:hdbox_app/shared/styles/colors.dart';
 import '../../shared/network/local/cache_helper.dart';
+import '../watchlist/watchlist_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -68,16 +69,27 @@ class ProfileScreen extends StatelessWidget {
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
-                    _buildOption(icon: Icons.settings, title: "Settings"),
-                    _buildOption(icon: Icons.lock, title: "Privacy"),
-                    _buildOption(icon: Icons.movie, title: "My Watchlist"),
                     _buildOption(
-                      icon: Icons.notifications,
-                      title: "Notifications",
+                      icon: Icons.settings,
+                      title: "Settings",
+                      onPressed: () {},
+                    ),
+                    _buildOption(
+                      icon: Icons.lock,
+                      title: "Privacy",
+                      onPressed: () {},
+                    ),
+                    _buildOption(
+                      icon: Icons.movie,
+                      title: "My Watchlist",
+                      onPressed: () {
+                        navigateTo(context, WatchlistScreen());
+                      },
                     ),
                     _buildOption(
                       icon: Icons.help_outline,
                       title: "Help & Support",
+                      onPressed: () {},
                     ),
                     const SizedBox(height: 20),
                     // Logout Button
@@ -162,7 +174,11 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOption({required IconData icon, required String title}) {
+  Widget _buildOption({
+    required IconData icon,
+    required String title,
+    required VoidCallback onPressed,
+  }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
@@ -170,17 +186,27 @@ class ProfileScreen extends StatelessWidget {
         color: const Color(0xff1a1a1a),
         borderRadius: BorderRadius.circular(15),
       ),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white, size: 24),
-          const SizedBox(width: 15),
-          Text(
-            title,
-            style: GoogleFonts.poppins(color: Colors.white, fontSize: 15),
-          ),
-          const Spacer(),
-          Icon(Icons.arrow_forward_ios, color: Colors.white38, size: 16),
-        ],
+      child: InkWell(
+        onTap: onPressed,
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 24),
+            const SizedBox(width: 15),
+            Text(
+              title,
+              style: GoogleFonts.poppins(color: Colors.white, fontSize: 15),
+            ),
+            const Spacer(),
+            IconButton(
+              icon: Icon(
+                Icons.arrow_forward_ios,
+                color: Colors.white38,
+                size: 16,
+              ),
+              onPressed: onPressed,
+            ),
+          ],
+        ),
       ),
     );
   }

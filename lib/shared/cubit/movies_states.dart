@@ -261,3 +261,25 @@ class MoviesGetMultiSearchErrorData extends MoviesState {
 
   MoviesGetMultiSearchErrorData({required this.error});
 }
+
+class AddToWatchListLoadingState extends MoviesState {}
+
+class AddToWatchListSuccessState extends MoviesState {}
+
+class AddToWatchListErrorState extends MoviesState {
+  final String? error;
+
+  AddToWatchListErrorState({required this.error});
+}
+
+class GetWatchListLoadingState extends MoviesState {}
+
+class GetWatchListSuccessState extends MoviesState {}
+
+class GetWatchListErrorState extends MoviesState {
+  final String? error;
+
+  GetWatchListErrorState({required this.error});
+}
+
+

@@ -93,13 +93,20 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
                           children: [
                             ActionButtonItem(
                               label: 'My List',
-                              icon: Icons.add,
-                              onTap: () {},
+                              icon: cubit.isLoaded==true?Icons.bookmark_outlined:Icons.bookmark_border,
+                              onPressed: () {
+                                cubit.addToWatchList(
+                                  movieId: cubit.tvMoviesModel!.id!,
+                                  name: cubit.tvMoviesModel!.name??'',
+                                  mediaType: 'tv',
+                                  image: cubit.detailsModel!.posterPath??''
+                                );
+                              },
                             ),
                             ActionButtonItem(
                               label: 'Share',
                               icon: Icons.share,
-                              onTap: () {},
+                              onPressed: () {},
                             ),
                           ],
                         ),
