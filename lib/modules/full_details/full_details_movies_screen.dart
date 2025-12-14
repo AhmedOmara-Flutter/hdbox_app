@@ -107,7 +107,8 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                                   movieId: cubit.detailsModel!.id!,
                                   name: cubit.detailsModel!.title??'',
                                   mediaType: 'movie',
-                                  image: cubit.detailsModel!.posterPath??''
+                                  image: cubit.detailsModel!.posterPath??'',
+                                  overview: cubit.detailsModel!.overview??''
                                 );
                               },
                             ),

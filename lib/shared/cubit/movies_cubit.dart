@@ -628,6 +628,7 @@ class MoviesCubit extends Cubit<MoviesState> {
     required String mediaType,
     required String name,
     required String image,
+    required String overview
   }) async {
     emit(AddToWatchListLoadingState());
     isLoaded = false;
@@ -639,6 +640,7 @@ class MoviesCubit extends Cubit<MoviesState> {
         .doc('${mediaType}_$movieId')
         .set({
           'name': name,
+          'overview': overview,
           'movieId': movieId,
           'mediaType': mediaType,
           'image': image,
@@ -655,16 +657,19 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   Future<void> getWatchList() async {
     emit(GetWatchListLoadingState());
-
+    watchlist.clear();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Constants.uId)
         .collection('watchlist')
-        .orderBy('addedAt', descending: false)
+        .orderBy('addedAt', descending: true)
         .get()
         .then((value) {
           value.docs.forEach((element) {
             watchlist.add(WatchlistModel.fromJson(element.data()));
+            print(element.id);
+            print(element.data());
+
           });
           emit(GetWatchListSuccessState());
         })
