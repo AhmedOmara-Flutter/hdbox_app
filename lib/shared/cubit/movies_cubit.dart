@@ -17,7 +17,6 @@ import '../../models/now_playing_model.dart';
 import '../../models/onboarding_model.dart';
 import '../../models/person_data_model.dart';
 import '../../models/popular_model.dart';
-import '../../models/search_model.dart';
 import '../../models/top_rated_model.dart';
 import '../../models/top_search_model.dart';
 import '../../models/trending_model.dart';
@@ -41,7 +40,7 @@ class MoviesCubit extends Cubit<MoviesState> {
   var pageController = PageController();
 
   int currentIndex = 0;
-  int carousalIndex = 0;
+  // int carousalIndex = 0;
   int indexIteration=0;
   String searchText = '';
   bool isLast = false;

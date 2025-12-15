@@ -109,7 +109,6 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                           style: style(14.0),
                           trimMode: TrimMode.Line,
                           trimLines: 3,
-
                           trimCollapsedText: "See More",
                           trimExpandedText: "See Less",
                           colorClickableText: ColorManager.blue,

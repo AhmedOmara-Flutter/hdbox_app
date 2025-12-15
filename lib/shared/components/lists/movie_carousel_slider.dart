@@ -60,14 +60,13 @@ class MovieCarousel extends StatelessWidget {
             enlargeCenterPage: false,
             enlargeFactor: 0.25,
             autoPlay: true,
-            autoPlayInterval: const Duration(seconds: 5),
+            autoPlayInterval: const Duration(seconds: 8),
             autoPlayAnimationDuration: const Duration(milliseconds: 900),
             viewportFraction: 1,
-            //initialPage: 5,
             aspectRatio: 16 / 9,
             scrollDirection: Axis.horizontal,
             onPageChanged: (index, _) {
-              cubit.carousalIndex = movies[index].id;
+              //cubit.carousalIndex = movies[index].id;
             cubit.indexIteration=index;
             },
           ),

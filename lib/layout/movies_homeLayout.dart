@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../modules/watchlist/watchlist_screen.dart';
+import '../shared/components/lists/build_snackbar.dart';
+import '../shared/components/utils/function.dart';
 import '../shared/cubit/movies_cubit.dart';
 import '../shared/cubit/movies_states.dart';
 import '../shared/styles/colors.dart';
@@ -12,6 +15,16 @@ class MoviesHomeLayout extends StatelessWidget {
     return BlocConsumer<MoviesCubit, MoviesState>(
       listener: (context, state) {
         // TODO: implement listener
+        if (state is AddToWatchListSuccessState) {
+          return BuildSnackBar.showWatchlistSnackBar(
+            context: context,
+            message: 'Added to watchlist',
+            buttonText: 'VIEW',
+            onPressed: () {
+              navigateTo(context, WatchlistScreen());
+            },
+          );
+        }
       },
       builder: (context, state) {
         var cubit = MoviesCubit.get(context);

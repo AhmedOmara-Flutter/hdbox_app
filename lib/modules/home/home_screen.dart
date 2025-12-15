@@ -25,16 +25,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<MoviesCubit, MoviesState>(
       listener: (context, state) {
-        if (state is AddToWatchListSuccessState) {
-          return BuildSnackBar.showWatchlistSnackBar(
-            context: context,
-            message: 'Added to watchlist',
-            buttonText: 'VIEW',
-            onPressed: () {
-              navigateTo(context, WatchlistScreen());
-            },
-          );
-        }
+
       },
       builder: (context, state) {
         var cubit = MoviesCubit.get(context);
@@ -87,9 +78,15 @@ class HomeScreen extends StatelessWidget {
                           playPressed: () async {
                           final movie= await cubit.getDetailsData(id: cubit.trendingModel!.results![cubit
                               .indexIteration].id!);
+                          if (movie!.homepage == "") {
+                            showSnakeBar(color: ColorManager.red,
+                                context: context,
+                                label: 'No videos found');
+                          } else {
                             launchUrl(
-                              Uri.parse(movie!.homepage!),
+                              Uri.parse(movie.homepage!),
                             );
+                          }
                           },
                           infoPressed: () {
                             navigateTo(
