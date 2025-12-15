@@ -283,3 +283,4 @@ class GetWatchListErrorState extends MoviesState {
 }
 
 
+class FilterWatchListState extends MoviesState {}

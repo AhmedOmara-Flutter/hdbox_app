@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hdbox_app/modules/full_details/person_data_movies.dart';
 import 'package:hdbox_app/modules/full_details/photos_screen.dart';
 import 'package:hdbox_app/modules/full_details/trailer_screen.dart';
+import 'package:hdbox_app/modules/watchlist/watchlist_screen.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../shared/components/buttons/action_button_item.dart';
@@ -12,6 +13,7 @@ import '../../shared/components/cards/build_cast_item.dart';
 import '../../shared/components/cards/build_movie_card.dart';
 import '../../shared/components/layout/build_full_back.dart';
 import '../../shared/components/layout/build_image_screen.dart';
+import '../../shared/components/lists/build_snackbar.dart';
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
@@ -30,7 +32,17 @@ class FullDetailsMoviesScreen extends StatelessWidget {
     cubit.getSimilarData(id: movieId);
 
     return BlocConsumer<MoviesCubit, MoviesState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AddToWatchListSuccessState) {
+          return BuildSnackBar.showWatchlistSnackBar(
+            context: context,
+            message: 'Added to watchlist',
+            onPressed: () {
+              navigateTo(context, WatchlistScreen());
+            },
+          );
+        }
+      },
       builder: (context, state) {
         if (cubit.detailsModel == null) {
           return Scaffold(
@@ -47,13 +59,13 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                 ConditionalBuilder(
                   condition: cubit.detailsModel != null,
                   builder: (context) => BuildImageScreen(
-                    image: '${cubit.detailsModel!.backdropPath ?? ''}',
-                    title: '${cubit.detailsModel!.title ?? 'No title'}',
+                    image: cubit.detailsModel!.backdropPath ??cubit.detailsModel!.posterPath! ,
+                    title: cubit.detailsModel!.title ?? '',
                     voteAverage: cubit.detailsModel!.voteAverage!
                         .toStringAsFixed(1)
                         .toString(),
                     date:
-                        '${formattedDate(date: cubit.detailsModel!.releaseDate ?? 'inValid Date')}',
+                        formattedDate(date: cubit.detailsModel!.releaseDate ?? 'Unknown year'),
                   ),
                   fallback: (context) => BuildFullBack(),
                 ),
@@ -101,14 +113,15 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                             ),
                             ActionButtonItem(
                               label: 'My List',
-                              icon:cubit.isLoaded==true?Icons.bookmark_outlined:Icons.bookmark_border,
+                              icon: Icons.add,
                               onPressed: () {
                                 cubit.addToWatchList(
                                   movieId: cubit.detailsModel!.id!,
-                                  name: cubit.detailsModel!.title??'',
+                                  name: cubit.detailsModel!.title ?? '',
                                   mediaType: 'movie',
-                                  image: cubit.detailsModel!.posterPath??'',
-                                  overview: cubit.detailsModel!.overview??''
+                                  posterPath: '${cubit.detailsModel!.posterPath ?? cubit.detailsModel!.backdropPath}',
+                                  backdropPath: '${cubit.detailsModel!.backdropPath ?? cubit.detailsModel!.posterPath}',
+                                  overview: cubit.detailsModel!.overview ?? '',
                                 );
                               },
                             ),
@@ -201,7 +214,7 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                                         isReplacement: true,
                                       );
                                     },
-                                    image: '${movie.posterPath}',
+                                    image: '${movie.posterPath??movie.backdropPath}',
                                     voteAverage: movie.voteAverage!
                                         .toStringAsFixed(1),
                                   );

@@ -13,10 +13,12 @@ import '../../shared/components/cards/build_photos_header_card.dart';
 import '../../shared/components/cards/build_season_card.dart';
 import '../../shared/components/layout/build_full_back.dart';
 import '../../shared/components/layout/build_image_screen.dart';
+import '../../shared/components/lists/build_snackbar.dart';
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
 import '../../shared/styles/colors.dart';
+import '../watchlist/watchlist_screen.dart';
 
 class FullDetailsTvMoviesScreen extends StatelessWidget {
   final int movieId;
@@ -31,7 +33,17 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
     cubit.getImagesTVData(id: movieId);
 
     return BlocConsumer<MoviesCubit, MoviesState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is AddToWatchListSuccessState) {
+          return BuildSnackBar.showWatchlistSnackBar(
+            context: context,
+            message: 'Added to watchlist',
+            onPressed: () {
+              navigateTo(context, WatchlistScreen());
+            },
+          );
+        }
+      },
       builder: (context, state) {
         if (cubit.tvMoviesModel == null || cubit.imagesTVModel == null) {
           return Scaffold(
@@ -49,7 +61,7 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
                 ConditionalBuilder(
                   condition: cubit.tvMoviesModel != null,
                   builder: (context) => BuildImageScreen(
-                    image: '${cubit.tvMoviesModel!.backdropPath}',
+                    image: '${cubit.tvMoviesModel!.backdropPath??cubit.tvMoviesModel!.posterPath}',
                     title: '${cubit.tvMoviesModel!.name}',
                     season: '${cubit.tvMoviesModel!.numberOfSeasons}',
                     episode: '${cubit.tvMoviesModel!.numberOfEpisodes}',
@@ -93,14 +105,16 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
                           children: [
                             ActionButtonItem(
                               label: 'My List',
-                              icon: cubit.isLoaded==true?Icons.bookmark_outlined:Icons.bookmark_border,
+                              icon: Icons.add,
                               onPressed: () {
                                 cubit.addToWatchList(
                                   movieId: cubit.tvMoviesModel!.id!,
-                                  name: cubit.tvMoviesModel!.name??'',
+                                  name: cubit.tvMoviesModel!.name ?? '',
                                   mediaType: 'tv',
-                                  image: cubit.detailsModel!.posterPath??'',
-                                  overview: cubit.detailsModel!.overview??''
+                                  posterPath:
+                                      '${cubit.tvMoviesModel!.posterPath ?? cubit.tvMoviesModel!.backdropPath}',
+                                  backdropPath: '${cubit.tvMoviesModel!.backdropPath ?? cubit.tvMoviesModel!.posterPath}',
+                                  overview: cubit.tvMoviesModel!.overview ?? '',
                                 );
                               },
                             ),
@@ -147,7 +161,7 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
                         cubit.tvMoviesModel != null &&
                         cubit.tvMoviesModel!.seasons != null &&
                         cubit.tvMoviesModel!.seasons!.isNotEmpty,
-                    builder: (context) => Container(
+                    builder: (context) => SizedBox(
                       height: 320.0,
                       child: ListView.separated(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -165,8 +179,6 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
                                       .seasons![index]
                                       .seasonNumber!,
                                 ),
-
-                                //false,
                               );
                             },
                             image: tvShow.posterPath ?? '',
@@ -242,7 +254,7 @@ class FullDetailsTvMoviesScreen extends StatelessWidget {
                                   isReplacement: true,
                                 );
                               },
-                              image: '${movie.posterPath}',
+                              image: '${movie.posterPath??movie.backdropPath}',
                               voteAverage: movie.voteAverage!.toStringAsFixed(
                                 1,
                               ),

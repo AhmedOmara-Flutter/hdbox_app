@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hdbox_app/modules/search/search_info_row.dart';
 import 'package:hdbox_app/modules/search/top_search_item.dart';
-
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
@@ -87,7 +84,7 @@ class SearchScreen extends StatelessWidget {
                         child: ListView.builder(
                           itemBuilder: (context, index) {
                             final movie =
-                                cubit.multiSearchModel!.results![index];
+                                cubit.multiSearchModel!.results[index];
 
                             return SearchInfoRow(
                               onTap: () {

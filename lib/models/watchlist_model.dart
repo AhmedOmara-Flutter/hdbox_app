@@ -4,7 +4,8 @@ class WatchlistModel {
   int? movieId;
   String? mediaType;
   Timestamp? addedAt;
-  String? image;
+  String? posterPath;
+  String? backdropPath;
   String? overview;
   String ?name;
 
@@ -12,18 +13,20 @@ class WatchlistModel {
     this.movieId,
     this.mediaType,
     this.addedAt,
-    this.image,
+    this.posterPath,
     this.overview,
-    this.name
+    this.name,
+    this.backdropPath
   });
 
   WatchlistModel.fromJson(Map<String, dynamic> json) {
     mediaType = json['mediaType'];
     movieId = json['movieId'];
     addedAt = json['addedAt'];
-    image = json['image'];
+    posterPath = json['image'];
     overview = json['overview'];
     name = json['name'];
+    backdropPath = json['backdropPath'];
   }
 
   Map<String, dynamic> toMap() {
@@ -31,9 +34,10 @@ class WatchlistModel {
       'mediaType': mediaType,
       'movieId': movieId,
       'addedAt': addedAt,
-      'image': image,
+      'image': posterPath,
       'overview': overview,
       'name': name,
+      'backdropPath': backdropPath
     };
   }
 }

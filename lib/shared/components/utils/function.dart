@@ -105,3 +105,50 @@ Widget startWidget({required String uId}) {
   }
   return widget;
 }
+
+Widget emptyWatchlistMessage(String type) {
+  return Center(
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(
+          Icons.bookmark_border,
+          size: 70,
+          color: Colors.grey.withOpacity(0.6),
+        ),
+        const SizedBox(height: 15),
+        Text(
+          type == 'movie'
+              ? 'No movies in your watchlist'
+              : 'No TV shows in your watchlist',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+String formatName(String input) {
+  if (input.isEmpty) return input;
+
+  String result = '';
+
+  for (int i = 0; i < input.length; i++) {
+    String char = input[i];
+
+    if (char == char.toUpperCase() && char != char.toLowerCase()) {
+      result += ' ';
+    }
+
+    result += char;
+  }
+
+  return result.trim().replaceFirst(
+    result[0],
+    result[0].toUpperCase(),
+  );
+}

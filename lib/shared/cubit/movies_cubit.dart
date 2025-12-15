@@ -55,6 +55,7 @@ class MoviesCubit extends Cubit<MoviesState> {
   List<AppBar> appBars = [
     AppBar(toolbarHeight: 10.0),
     AppBar(backgroundColor: Colors.yellow),
+
     AppBar(backgroundColor: Colors.purple),
     AppBar(backgroundColor: Colors.green),
   ];
@@ -247,7 +248,7 @@ class MoviesCubit extends Cubit<MoviesState> {
         )
         .then((value) {
           multiSearchModel = MultiSearchModel.fromJson(value.data);
-          multiSearchModel!.results!.removeWhere(
+          multiSearchModel!.results.removeWhere(
             (element) => element.mediaType == 'person',
           );
 
@@ -622,12 +623,15 @@ class MoviesCubit extends Cubit<MoviesState> {
   ////////////////////////////////Add to Watchlist ///////////////////////////////
   bool isLoaded = false;
   List<WatchlistModel> watchlist = [];
+  List <WatchlistModel>filteredWatchList=[];
+  String selectedType = 'movie'; // default
 
   Future<void> addToWatchList({
     required int movieId,
     required String mediaType,
     required String name,
-    required String image,
+    required String posterPath,
+    required String backdropPath,
     required String overview
   }) async {
     emit(AddToWatchListLoadingState());
@@ -643,7 +647,8 @@ class MoviesCubit extends Cubit<MoviesState> {
           'overview': overview,
           'movieId': movieId,
           'mediaType': mediaType,
-          'image': image,
+          'posterPath': posterPath,
+          'backdropPath': backdropPath,
           'addedAt': FieldValue.serverTimestamp(),
         })
         .then((value) {
@@ -658,6 +663,7 @@ class MoviesCubit extends Cubit<MoviesState> {
   Future<void> getWatchList() async {
     emit(GetWatchListLoadingState());
     watchlist.clear();
+    filteredWatchList.clear();
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Constants.uId)
@@ -671,10 +677,27 @@ class MoviesCubit extends Cubit<MoviesState> {
             print(element.data());
 
           });
+          filteredWatchListFun(type: selectedType);
           emit(GetWatchListSuccessState());
+
         })
         .catchError((error) {
           emit(GetWatchListErrorState(error: error.toString()));
         });
   }
+
+  void filteredWatchListFun({required String type}){
+    selectedType=type;
+     filteredWatchList.clear(); // ✅ مهم جدا
+
+    for (var element in watchlist) {
+      if(element.mediaType==selectedType){
+        filteredWatchList.add(element);
+      }
+    }
+    emit(FilterWatchListState()); // ✅ علشان الـ UI يعيد البناء
+  }
+
+
+
 }
