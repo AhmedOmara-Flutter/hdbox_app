@@ -5,7 +5,8 @@ class BuildSnackBar {
   static void showWatchlistSnackBar({
     required BuildContext context,
     required String message,
-    required VoidCallback onPressed,
+    VoidCallback? onPressed,
+     String ?buttonText,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -21,16 +22,17 @@ class BuildSnackBar {
                 style: TextStyle(color: Colors.white, fontSize: 14),
               ),
             ),
-            TextButton(
-              onPressed: onPressed,
-              child: Text(
-                'VIEW',
-                style: TextStyle(
-                  color: ColorManager.red,
-                  fontWeight: FontWeight.bold,
+            if (onPressed != null && buttonText != null)
+              TextButton(
+                onPressed: onPressed,
+                child: Text(
+                  buttonText,
+                  style: TextStyle(
+                    color: ColorManager.red,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

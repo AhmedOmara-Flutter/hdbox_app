@@ -37,6 +37,7 @@ class FullDetailsMoviesScreen extends StatelessWidget {
           return BuildSnackBar.showWatchlistSnackBar(
             context: context,
             message: 'Added to watchlist',
+            buttonText: 'VIEW',
             onPressed: () {
               navigateTo(context, WatchlistScreen());
             },
@@ -52,190 +53,223 @@ class FullDetailsMoviesScreen extends StatelessWidget {
             ),
           );
         }
-        return Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                ConditionalBuilder(
-                  condition: cubit.detailsModel != null,
-                  builder: (context) => BuildImageScreen(
-                    image: cubit.detailsModel!.backdropPath ??cubit.detailsModel!.posterPath! ,
-                    title: cubit.detailsModel!.title ?? '',
-                    voteAverage: cubit.detailsModel!.voteAverage!
-                        .toStringAsFixed(1)
-                        .toString(),
-                    date:
-                        formattedDate(date: cubit.detailsModel!.releaseDate ?? 'Unknown year'),
-                  ),
-                  fallback: (context) => BuildFullBack(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 23.0),
-                        child: BuildPlayButton(
-                          onPressed: () async {
-                            await cubit.getVideoMoviesTrailerData(id: movieId);
-                            launchUrl(
-                              Uri.parse(
-                                "https://www.youtube.com/watch?v=${cubit.videoModel!.results![0].key}",
-                              ),
-                            );
-                          },
-                          label: 'Play',
-                          icon: Icons.play_arrow,
+        //todo
+        return WillPopScope(
+          onWillPop: () async {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            return true;
+          },
+          child: Scaffold(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  ConditionalBuilder(
+                    condition: cubit.detailsModel != null,
+                    builder: (context) =>
+                        BuildImageScreen(
+                          image:
+                          cubit.detailsModel!.backdropPath ??
+                              cubit.detailsModel!.posterPath!,
+                          title: cubit.detailsModel!.title ?? '',
+                          voteAverage: cubit.detailsModel!.voteAverage!
+                              .toStringAsFixed(1)
+                              .toString(),
+                          date: formattedDate(
+                            date: cubit.detailsModel!.releaseDate ??
+                                'Unknown year',
+                          ),
                         ),
-                      ),
-                      ReadMoreText(
-                        '${cubit.detailsModel!.overview}',
-                        style: style(14.0),
-                        trimMode: TrimMode.Line,
-                        trimLines: 3,
-
-                        trimCollapsedText: "See More",
-                        trimExpandedText: "See Less",
-                        colorClickableText: ColorManager.blue,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            ActionButtonItem(
-                              label: 'Trailer',
-                              icon: Icons.movie_creation_outlined,
-                              onPressed: () {
-                                navigateTo(context, TrailerScreen(id: movieId));
-                              },
-                            ),
-                            ActionButtonItem(
-                              label: 'My List',
-                              icon: Icons.add,
-                              onPressed: () {
-                                cubit.addToWatchList(
-                                  movieId: cubit.detailsModel!.id!,
-                                  name: cubit.detailsModel!.title ?? '',
-                                  mediaType: 'movie',
-                                  posterPath: '${cubit.detailsModel!.posterPath ?? cubit.detailsModel!.backdropPath}',
-                                  backdropPath: '${cubit.detailsModel!.backdropPath ?? cubit.detailsModel!.posterPath}',
-                                  overview: cubit.detailsModel!.overview ?? '',
+                    fallback: (context) => BuildFullBack(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 23.0),
+                          child: BuildPlayButton(
+                            onPressed: () async {
+                              if (cubit.detailsModel!.homepage == "") {
+                                showSnakeBar(color: ColorManager.red,
+                                    context: context,
+                                    label: 'No videos found');
+                              } else {
+                                launchUrl(
+                                  Uri.parse(cubit.detailsModel!.homepage!),
                                 );
+                              }
                               },
-                            ),
-                            ActionButtonItem(
-                              label: 'Share',
-                              icon: Icons.share,
-                              onPressed: () {},
-                            ),
-                            ActionButtonItem(
-                              label: 'Photos',
-                              icon: Icons.photo,
-                              onPressed: () {
-                                navigateTo(context, PhotosScreen(id: movieId));
-                              },
-                            ),
-                          ],
+                            label: 'Play',
+                            icon: Icons.play_arrow,
+                          ),
                         ),
-                      ),
-                      ConditionalBuilder(
-                        condition:
-                            cubit.creditsModel != null &&
-                            cubit.creditsModel!.credits != null &&
-                            cubit.creditsModel!.credits!.cast != null &&
-                            cubit.creditsModel!.credits!.cast!.isNotEmpty,
-                        builder: (context) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('CAST', style: style(16.0)),
-                            SizedBox(
-                              height: 110.0,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  final credit =
-                                      cubit.creditsModel!.credits!.cast![index];
-                                  return BuildCastItem(
-                                    onTap: () {
-                                      navigateTo(
-                                        context,
-                                        PersonDataMovies(
-                                          id: credit.id!,
-                                          name: credit.name!,
-                                        ),
-                                      );
-                                    },
-                                    image: '${credit.profilePath}',
+                        ReadMoreText(
+                          '${cubit.detailsModel!.overview}',
+                          style: style(14.0),
+                          trimMode: TrimMode.Line,
+                          trimLines: 3,
+
+                          trimCollapsedText: "See More",
+                          trimExpandedText: "See Less",
+                          colorClickableText: ColorManager.blue,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              ActionButtonItem(
+                                label: 'Trailer',
+                                icon: Icons.movie_creation_outlined,
+                                onPressed: () {
+                                  navigateTo(
+                                    context,
+                                    TrailerScreen(id: movieId),
                                   );
                                 },
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(width: 10.0),
-                                itemCount:
-                                    cubit.creditsModel!.credits!.cast!.length,
                               ),
-                            ),
-                          ],
-                        ),
-                        fallback: (context) => SizedBox(),
-                      ),
-                      ConditionalBuilder(
-                        condition:
-                            cubit.similarModel != null &&
-                            cubit.similarModel!.similar != null &&
-                            cubit.similarModel!.similar!.results != null &&
-                            cubit.similarModel!.similar!.results!.isNotEmpty,
-                        builder: (context) => Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 15.0),
-                              child: Text('RELATED', style: style(16.0)),
-                            ),
-                            SizedBox(
-                              height: 180.0,
-                              child: ListView.separated(
-                                padding: EdgeInsets.only(bottom: 10.0),
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final movie = cubit
-                                      .similarModel!
-                                      .similar!
-                                      .results![index];
-                                  return BuildMovieCard(
-                                    onTap: () {
-                                      navigateTo(
-                                        context,
-                                        FullDetailsMoviesScreen(
-                                          movieId: movie.id!,
-                                        ),
-                                        isReplacement: true,
-                                      );
-                                    },
-                                    image: '${movie.posterPath??movie.backdropPath}',
-                                    voteAverage: movie.voteAverage!
-                                        .toStringAsFixed(1),
+                              ActionButtonItem(
+                                label: 'My List',
+                                icon: Icons.add,
+                                onPressed: () {
+                                  cubit.addToWatchList(
+                                    movieId: cubit.detailsModel!.id!,
+                                    name: cubit.detailsModel!.title ?? '',
+                                    mediaType: 'movie',
+                                    posterPath:
+                                    '${cubit.detailsModel!.posterPath ??
+                                        cubit.detailsModel!.backdropPath}',
+                                    backdropPath:
+                                    '${cubit.detailsModel!.backdropPath ??
+                                        cubit.detailsModel!.posterPath}',
+                                    overview:
+                                    cubit.detailsModel!.overview ?? '',
                                   );
                                 },
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(width: 10.0),
-                                itemCount: cubit
-                                    .similarModel!
-                                    .similar!
-                                    .results!
-                                    .length,
                               ),
-                            ),
-                          ],
+                              ActionButtonItem(
+                                label: 'Share',
+                                icon: Icons.share,
+                                onPressed: () {},
+                              ),
+                              ActionButtonItem(
+                                label: 'Photos',
+                                icon: Icons.photo,
+                                onPressed: () {
+                                  navigateTo(
+                                    context,
+                                    PhotosScreen(id: movieId),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        fallback: (context) => SizedBox(),
-                      ),
-                    ],
+                        ConditionalBuilder(
+                          condition:
+                          cubit.creditsModel != null &&
+                              cubit.creditsModel!.credits != null &&
+                              cubit.creditsModel!.credits!.cast != null &&
+                              cubit.creditsModel!.credits!.cast!.isNotEmpty,
+                          builder: (context) =>
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('CAST', style: style(16.0)),
+                                  SizedBox(
+                                    height: 110.0,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemBuilder: (context, index) {
+                                        final credit = cubit
+                                            .creditsModel!
+                                            .credits!
+                                            .cast![index];
+                                        return BuildCastItem(
+                                          onTap: () {
+                                            navigateTo(
+                                              context,
+                                              PersonDataMovies(
+                                                id: credit.id!,
+                                                name: credit.name!,
+                                              ),
+                                            );
+                                          },
+                                          image: '${credit.profilePath}',
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(width: 10.0),
+                                      itemCount:
+                                      cubit.creditsModel!.credits!.cast!.length,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          fallback: (context) => SizedBox(),
+                        ),
+                        ConditionalBuilder(
+                          condition:
+                          cubit.similarModel != null &&
+                              cubit.similarModel!.similar != null &&
+                              cubit.similarModel!.similar!.results != null &&
+                              cubit.similarModel!.similar!.results!.isNotEmpty,
+                          builder: (context) =>
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 15.0),
+                                    child: Text('RELATED', style: style(16.0)),
+                                  ),
+                                  SizedBox(
+                                    height: 180.0,
+                                    child: ListView.separated(
+                                      padding: EdgeInsets.only(bottom: 10.0),
+                                      scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      itemBuilder: (context, index) {
+                                        final movie = cubit
+                                            .similarModel!
+                                            .similar!
+                                            .results![index];
+                                        return BuildMovieCard(
+                                          onTap: () {
+                                            navigateTo(
+                                              context,
+                                              FullDetailsMoviesScreen(
+                                                movieId: movie.id!,
+                                              ),
+                                              isReplacement: true,
+                                            );
+                                          },
+                                          image:
+                                          '${movie.posterPath ??
+                                              movie.backdropPath}',
+                                          voteAverage: movie.voteAverage!
+                                              .toStringAsFixed(1),
+                                        );
+                                      },
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(width: 10.0),
+                                      itemCount: cubit
+                                          .similarModel!
+                                          .similar!
+                                          .results!
+                                          .length,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                          fallback: (context) => SizedBox(),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );

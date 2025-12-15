@@ -10,9 +10,11 @@ void navigateTo(
   Widget screen, {
   bool isReplacement = false,
 }) {
+  if (!context.mounted) return; // ✅ الحل
+
   if (isReplacement) {
-    Navigator.pushReplacement(
-      context,
+    //todo
+    Navigator.of(context, rootNavigator: true).pushReplacement(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => screen,
         transitionDuration: Duration(milliseconds: 350),
@@ -27,8 +29,7 @@ void navigateTo(
       ),
     );
   } else {
-    Navigator.push(
-      context,
+    Navigator.of(context, rootNavigator: true).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => screen,
         transitionDuration: Duration(milliseconds: 350),
@@ -147,8 +148,5 @@ String formatName(String input) {
     result += char;
   }
 
-  return result.trim().replaceFirst(
-    result[0],
-    result[0].toUpperCase(),
-  );
+  return result.trim().replaceFirst(result[0], result[0].toUpperCase());
 }

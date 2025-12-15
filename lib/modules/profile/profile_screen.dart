@@ -43,7 +43,7 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 15),
                         // Username
-                        Text(formatName(model.name??''), style: style(17.0)),
+                        Text(model.name!.toUpperCase(), style: style(17.0)),
                         SizedBox(height: 5.0),
                         // Email
                         Text(model.email!.toLowerCase(), style: style(13.0)),

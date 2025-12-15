@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
 import 'package:hdbox_app/shared/styles/colors.dart';
-
+import 'package:flutter/material.dart';
 import '../effects/build_shimmer.dart';
 import '../utils/function.dart';
 
@@ -57,7 +56,7 @@ class BuildWatchlistCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(
                         left: 15.0,
-                        right: 15.0,
+                        right: 20.0,
                         top: 5.0,
                       ),
                       child: Column(

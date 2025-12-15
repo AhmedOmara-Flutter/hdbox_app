@@ -42,7 +42,7 @@ class BuildSeasonCard extends StatelessWidget {
               ),
               child: CachedNetworkImage(
                 imageUrl: "https://image.tmdb.org/t/p/w500/$image}",
-                height: 200,
+                height: 200.0,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 placeholder: (context, url) =>

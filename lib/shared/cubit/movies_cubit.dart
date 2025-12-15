@@ -623,8 +623,9 @@ class MoviesCubit extends Cubit<MoviesState> {
   ////////////////////////////////Add to Watchlist ///////////////////////////////
   bool isLoaded = false;
   List<WatchlistModel> watchlist = [];
-  List <WatchlistModel>filteredWatchList=[];
+  List<WatchlistModel> filteredWatchList = [];
   String selectedType = 'movie'; // default
+  bool isWatchlistLoading = false;
 
   Future<void> addToWatchList({
     required int movieId,
@@ -632,11 +633,10 @@ class MoviesCubit extends Cubit<MoviesState> {
     required String name,
     required String posterPath,
     required String backdropPath,
-    required String overview
+    required String overview,
   }) async {
     emit(AddToWatchListLoadingState());
     isLoaded = false;
-
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Constants.uId)
@@ -653,7 +653,7 @@ class MoviesCubit extends Cubit<MoviesState> {
         })
         .then((value) {
           isLoaded = true;
-          emit(AddToWatchListSuccessState());
+          emit(AddToWatchListSuccessState(mediaType: mediaType));
         })
         .catchError((error) {
           emit(AddToWatchListErrorState(error: error.toString()));
@@ -661,6 +661,7 @@ class MoviesCubit extends Cubit<MoviesState> {
   }
 
   Future<void> getWatchList() async {
+    isWatchlistLoading = true;
     emit(GetWatchListLoadingState());
     watchlist.clear();
     filteredWatchList.clear();
@@ -673,31 +674,45 @@ class MoviesCubit extends Cubit<MoviesState> {
         .then((value) {
           value.docs.forEach((element) {
             watchlist.add(WatchlistModel.fromJson(element.data()));
-            print(element.id);
-            print(element.data());
-
           });
           filteredWatchListFun(type: selectedType);
+          isWatchlistLoading = false;
           emit(GetWatchListSuccessState());
-
         })
         .catchError((error) {
+          isWatchlistLoading = false;
           emit(GetWatchListErrorState(error: error.toString()));
         });
   }
 
-  void filteredWatchListFun({required String type}){
-    selectedType=type;
-     filteredWatchList.clear(); // ✅ مهم جدا
-
+  void filteredWatchListFun({required String type}) {
+    selectedType = type;
+    filteredWatchList.clear(); // ✅ مهم جدا
     for (var element in watchlist) {
-      if(element.mediaType==selectedType){
+      if (element.mediaType == selectedType) {
         filteredWatchList.add(element);
       }
     }
-    emit(FilterWatchListState()); // ✅ علشان الـ UI يعيد البناء
+    emit(FilterWatchListState());
   }
 
-
-
+  Future<void> deleteWatchList({
+    required String mediaType,
+    required int movieId,
+  }) async {
+    emit(DeleteWatchListLoadingState());
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Constants.uId)
+        .collection('watchlist')
+        .doc('${mediaType}_$movieId')
+        .delete()
+        .then((value) {
+          getWatchList();
+          emit(DeleteWatchListSuccessState());
+        })
+        .catchError((error) {
+          emit(DeleteWatchListErrorState(error: error.toString()));
+        });
+  }
 }
