@@ -42,6 +42,7 @@ class MoviesCubit extends Cubit<MoviesState> {
 
   int currentIndex = 0;
   int carousalIndex = 0;
+  int indexIteration=0;
   String searchText = '';
   bool isLast = false;
 
