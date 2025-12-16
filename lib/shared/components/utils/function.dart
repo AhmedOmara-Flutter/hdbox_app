@@ -12,7 +12,8 @@ void navigateTo(
 }) {
   if (isReplacement) {
     //todo
-    Navigator.of(context, rootNavigator: true).pushReplacement(
+    Navigator.pushReplacement(
+      context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => screen,
         transitionDuration: Duration(milliseconds: 350),
@@ -27,7 +28,8 @@ void navigateTo(
       ),
     );
   } else {
-    Navigator.of(context, rootNavigator: true).push(
+    Navigator.push(
+      context,
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => screen,
         transitionDuration: Duration(milliseconds: 350),

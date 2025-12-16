@@ -28,14 +28,20 @@ class MoviesHomeLayout extends StatelessWidget {
       },
       builder: (context, state) {
         var cubit = MoviesCubit.get(context);
-        return WillPopScope(
-          onWillPop: () async {
+        //todo مش فاهم منها حاجه بس من غيرها التطبيق لو واقف علي watchlist ورجعت هرجع لل profile ثم home
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
+            if (didPop) return;
+            if (Navigator.of(context).canPop()) {
+              Navigator.of(context).pop();
+              return;
+            }
             if (cubit.currentIndex != 0) {
               cubit.changeBottomNavBar(0);
-              return false; //todo متقفلش التطبيق
-            } else {
-              return true; //todo اقفل التطبيق
+              return;
             }
+            Navigator.of(context).maybePop();
           },
           child: Scaffold(
             bottomNavigationBar: BottomNavigationBar(
