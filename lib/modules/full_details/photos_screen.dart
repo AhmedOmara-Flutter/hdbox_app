@@ -28,7 +28,9 @@ class PhotosScreen extends StatelessWidget {
       },
       builder: (context, state) {
         if (cubit.imagesModel == null) {
-          return BuildFullBack();
+          return Scaffold(
+            body: BuildFullBack(),
+          );
         }
         return cubit.imagesModel!.images!.backdrops!.isNotEmpty
             ? Scaffold(
