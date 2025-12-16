@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../shared/components/effects/build_shimmer.dart';
+import '../../shared/components/empty_state/no_data_view.dart';
 import '../../shared/components/layout/build_appbar_screens.dart';
 import '../../shared/components/layout/build_full_back.dart';
 import '../../shared/components/utils/function.dart';
@@ -33,17 +34,7 @@ class TrailerScreen extends StatelessWidget {
 
         if (cubit.videoModel!.results == null ||
             cubit.videoModel!.results!.isEmpty) {
-          return Scaffold(
-            appBar: BuildAppbarScreen(title: 'Trailers'),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset('images/video.png', height: 140.0, width: 140.0),
-                SizedBox(height: 8.0),
-                Center(child: Text("No Videos Available", style: style(16.0))),
-              ],
-            ),
-          );
+          return NoDataView(title: 'No Videos Available', appBarTitle: 'Trailers',);
         }
         return Scaffold(
           appBar: BuildAppbarScreen(title: 'Trailers'),
@@ -57,7 +48,7 @@ class TrailerScreen extends StatelessWidget {
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
                 itemCount: cubit.videoModel!.results!.length,
-                separatorBuilder: (_, __) =>
+                separatorBuilder: (context, index)=>
                     Divider(color: Colors.white12, height: 1),
                 itemBuilder: (context, index) {
                   final v = cubit.videoModel!.results![index];

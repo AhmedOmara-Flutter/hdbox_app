@@ -20,17 +20,27 @@ import '../../shared/cubit/movies_states.dart';
 import '../../shared/styles/colors.dart';
 import '../watchlist/watchlist_screen.dart';
 
-class FullDetailsTvMoviesScreen extends StatelessWidget {
+class FullDetailsTvMoviesScreen extends StatefulWidget {
   final int movieId;
 
   const FullDetailsTvMoviesScreen({super.key, required this.movieId});
 
   @override
+  State<FullDetailsTvMoviesScreen> createState() => _FullDetailsTvMoviesScreenState();
+}
+
+class _FullDetailsTvMoviesScreenState extends State<FullDetailsTvMoviesScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    MoviesCubit.get(context).getTVMoviesData(id: widget.movieId);
+    MoviesCubit.get(context).getSimilarTVData(id: widget.movieId);
+    MoviesCubit.get(context).getImagesTVData(id: widget.movieId);
+  }
+  @override
   Widget build(BuildContext context) {
     var cubit = MoviesCubit.get(context);
-    cubit.getTVMoviesData(id: movieId);
-    cubit.getSimilarTVData(id: movieId);
-    cubit.getImagesTVData(id: movieId);
 
     return BlocConsumer<MoviesCubit, MoviesState>(
       listener: (context, state) {

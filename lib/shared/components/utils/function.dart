@@ -10,8 +10,6 @@ void navigateTo(
   Widget screen, {
   bool isReplacement = false,
 }) {
-  if (!context.mounted) return; // ✅ الحل
-
   if (isReplacement) {
     //todo
     Navigator.of(context, rootNavigator: true).pushReplacement(

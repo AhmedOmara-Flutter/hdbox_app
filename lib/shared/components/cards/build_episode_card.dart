@@ -170,7 +170,8 @@ class BuildEpisodeCard extends StatelessWidget {
                                   4,
                                 ),
                                 child: Text(
-                                  "${cubit.episodeModel!.episodes![index].name ?? 'No title available'}",
+                                  cubit.episodeModel!.episodes![index].name ??
+                                      'No title available',
                                   style: GoogleFonts.poppins(
                                     color: Colors.white,
                                     fontSize: 16,

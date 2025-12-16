@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../shared/components/dialogs/show_image_dialog.dart';
 import '../../shared/components/effects/build_shimmer.dart';
+import '../../shared/components/empty_state/no_data_view.dart';
 import '../../shared/components/layout/build_appbar_screens.dart';
 import '../../shared/components/layout/build_full_back.dart';
 import '../../shared/cubit/movies_cubit.dart';
@@ -29,12 +30,10 @@ class PhotosScreen extends StatelessWidget {
         if (cubit.imagesModel == null) {
           return BuildFullBack();
         }
-        return Scaffold(
-          appBar: BuildAppbarScreen(
-            title: '${cubit.imagesModel!.title} Gallery',
-          ),
-          body: cubit.imagesModel!.images!.backdrops!.isNotEmpty
-              ? ConditionalBuilder(
+        return cubit.imagesModel!.images!.backdrops!.isNotEmpty
+            ? Scaffold(
+                appBar: BuildAppbarScreen(title: 'Photos'),
+                body: ConditionalBuilder(
                   condition: cubit.imagesModel != null,
                   builder: (context) => Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -92,30 +91,9 @@ class PhotosScreen extends StatelessWidget {
                     ),
                   ),
                   fallback: (context) => BuildFullBack(),
-                )
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: Image.asset(
-                        'images/no-photos.png',
-                        height: 200.0,
-                        width: 200.0,
-                      ),
-                    ),
-                    Text(
-                      "No Photos Available",
-                      style: TextStyle(
-                        color: ColorManager.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
                 ),
-        );
+              )
+            : NoDataView(title: 'No Photos Available', appBarTitle: 'Photos',image: 'no-photos.png',);
       },
     );
   }

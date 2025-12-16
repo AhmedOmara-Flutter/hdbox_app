@@ -19,18 +19,27 @@ import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
 import '../../shared/styles/colors.dart';
 
-class FullDetailsMoviesScreen extends StatelessWidget {
+class FullDetailsMoviesScreen extends StatefulWidget {
   final int movieId;
 
   const FullDetailsMoviesScreen({super.key, required this.movieId});
 
   @override
+  State<FullDetailsMoviesScreen> createState() => _FullDetailsMoviesScreenState();
+}
+
+class _FullDetailsMoviesScreenState extends State<FullDetailsMoviesScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    MoviesCubit.get(context).getDetailsData(id: widget.movieId);
+    MoviesCubit.get(context).getCreditsData(id: widget.movieId);
+    MoviesCubit.get(context).getSimilarData(id: widget.movieId);
+  }
+  @override
   Widget build(BuildContext context) {
     var cubit = MoviesCubit.get(context);
-    cubit.getDetailsData(id: movieId);
-    cubit.getCreditsData(id: movieId);
-    cubit.getSimilarData(id: movieId);
-
     return BlocConsumer<MoviesCubit, MoviesState>(
       listener: (context, state) {
         if (state is AddToWatchListSuccessState) {
@@ -65,20 +74,18 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                 children: [
                   ConditionalBuilder(
                     condition: cubit.detailsModel != null,
-                    builder: (context) =>
-                        BuildImageScreen(
-                          image:
+                    builder: (context) => BuildImageScreen(
+                      image:
                           cubit.detailsModel!.backdropPath ??
-                              cubit.detailsModel!.posterPath!,
-                          title: cubit.detailsModel!.title ?? '',
-                          voteAverage: cubit.detailsModel!.voteAverage!
-                              .toStringAsFixed(1)
-                              .toString(),
-                          date: formattedDate(
-                            date: cubit.detailsModel!.releaseDate ??
-                                'Unknown year',
-                          ),
-                        ),
+                          cubit.detailsModel!.posterPath??'',
+                      title: cubit.detailsModel!.title ?? 'No title',
+                      voteAverage: cubit.detailsModel!.voteAverage!
+                          .toStringAsFixed(1)
+                          .toString(),
+                      date: formattedDate(
+                        date: cubit.detailsModel!.releaseDate ?? 'Unknown year',
+                      ),
+                    ),
                     fallback: (context) => BuildFullBack(),
                   ),
                   Padding(
@@ -91,15 +98,17 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                           child: BuildPlayButton(
                             onPressed: () async {
                               if (cubit.detailsModel!.homepage == "") {
-                                showSnakeBar(color: ColorManager.red,
-                                    context: context,
-                                    label: 'No videos found');
+                                showSnakeBar(
+                                  color: ColorManager.red,
+                                  context: context,
+                                  label: 'No videos found',
+                                );
                               } else {
                                 launchUrl(
                                   Uri.parse(cubit.detailsModel!.homepage!),
                                 );
                               }
-                              },
+                            },
                             label: 'Play',
                             icon: Icons.play_arrow,
                           ),
@@ -124,7 +133,7 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                                 onPressed: () {
                                   navigateTo(
                                     context,
-                                    TrailerScreen(id: movieId),
+                                    TrailerScreen(id: widget.movieId),
                                   );
                                 },
                               ),
@@ -134,16 +143,15 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                                 onPressed: () {
                                   cubit.addToWatchList(
                                     movieId: cubit.detailsModel!.id!,
-                                    name: cubit.detailsModel!.title ?? '',
+                                    name:
+                                        cubit.detailsModel!.title ?? 'No title',
                                     mediaType: 'movie',
                                     posterPath:
-                                    '${cubit.detailsModel!.posterPath ??
-                                        cubit.detailsModel!.backdropPath}',
+                                        '${cubit.detailsModel!.posterPath ?? cubit.detailsModel!.backdropPath}',
                                     backdropPath:
-                                    '${cubit.detailsModel!.backdropPath ??
-                                        cubit.detailsModel!.posterPath}',
+                                        '${cubit.detailsModel!.backdropPath ?? cubit.detailsModel!.posterPath}',
                                     overview:
-                                    cubit.detailsModel!.overview ?? '',
+                                        cubit.detailsModel!.overview ?? '',
                                   );
                                 },
                               ),
@@ -158,7 +166,7 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                                 onPressed: () {
                                   navigateTo(
                                     context,
-                                    PhotosScreen(id: movieId),
+                                    PhotosScreen(id: widget.movieId),
                                   );
                                 },
                               ),
@@ -167,101 +175,97 @@ class FullDetailsMoviesScreen extends StatelessWidget {
                         ),
                         ConditionalBuilder(
                           condition:
-                          cubit.creditsModel != null &&
+                              cubit.creditsModel != null &&
                               cubit.creditsModel!.credits != null &&
                               cubit.creditsModel!.credits!.cast != null &&
                               cubit.creditsModel!.credits!.cast!.isNotEmpty,
-                          builder: (context) =>
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('CAST', style: style(16.0)),
-                                  SizedBox(
-                                    height: 110.0,
-                                    child: ListView.separated(
-                                      scrollDirection: Axis.horizontal,
-                                      itemBuilder: (context, index) {
-                                        final credit = cubit
-                                            .creditsModel!
-                                            .credits!
-                                            .cast![index];
-                                        return BuildCastItem(
-                                          onTap: () {
-                                            navigateTo(
-                                              context,
-                                              PersonDataMovies(
-                                                id: credit.id!,
-                                                name: credit.name!,
-                                              ),
-                                            );
-                                          },
-                                          image: '${credit.profilePath}',
+                          builder: (context) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('CAST', style: style(16.0)),
+                              SizedBox(
+                                height: 110.0,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    final credit = cubit
+                                        .creditsModel!
+                                        .credits!
+                                        .cast![index];
+                                    return BuildCastItem(
+                                      onTap: () {
+                                        navigateTo(
+                                          context,
+                                          PersonDataMovies(
+                                            id: credit.id!,
+                                            name: credit.name??'',
+                                          ),
                                         );
                                       },
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(width: 10.0),
-                                      itemCount:
+                                      image: '${credit.profilePath}',
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(width: 10.0),
+                                  itemCount:
                                       cubit.creditsModel!.credits!.cast!.length,
-                                    ),
-                                  ),
-                                ],
+                                ),
                               ),
+                            ],
+                          ),
                           fallback: (context) => SizedBox(),
                         ),
                         ConditionalBuilder(
                           condition:
-                          cubit.similarModel != null &&
+                              cubit.similarModel != null &&
                               cubit.similarModel!.similar != null &&
                               cubit.similarModel!.similar!.results != null &&
                               cubit.similarModel!.similar!.results!.isNotEmpty,
-                          builder: (context) =>
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 15.0),
-                                    child: Text('RELATED', style: style(16.0)),
-                                  ),
-                                  SizedBox(
-                                    height: 180.0,
-                                    child: ListView.separated(
-                                      padding: EdgeInsets.only(bottom: 10.0),
-                                      scrollDirection: Axis.horizontal,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        final movie = cubit
-                                            .similarModel!
-                                            .similar!
-                                            .results![index];
-                                        return BuildMovieCard(
-                                          onTap: () {
-                                            navigateTo(
-                                              context,
-                                              FullDetailsMoviesScreen(
-                                                movieId: movie.id!,
-                                              ),
-                                              isReplacement: true,
-                                            );
-                                          },
-                                          image:
-                                          '${movie.posterPath ??
-                                              movie.backdropPath}',
-                                          voteAverage: movie.voteAverage!
-                                              .toStringAsFixed(1),
+                          builder: (context) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 15.0),
+                                child: Text('RELATED', style: style(16.0)),
+                              ),
+                              SizedBox(
+                                height: 180.0,
+                                child: ListView.separated(
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  scrollDirection: Axis.horizontal,
+                                  shrinkWrap: true,
+                                  itemBuilder: (context, index) {
+                                    final movie = cubit
+                                        .similarModel!
+                                        .similar!
+                                        .results![index];
+                                    return BuildMovieCard(
+                                      onTap: () {
+                                        navigateTo(
+                                          context,
+                                          FullDetailsMoviesScreen(
+                                            movieId: movie.id!,
+                                          ),
+                                          isReplacement: true,
                                         );
                                       },
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(width: 10.0),
-                                      itemCount: cubit
-                                          .similarModel!
-                                          .similar!
-                                          .results!
-                                          .length,
-                                    ),
-                                  ),
-                                ],
+                                      image:
+                                          '${movie.posterPath ?? movie.backdropPath}',
+                                      voteAverage: movie.voteAverage!
+                                          .toStringAsFixed(1),
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(width: 10.0),
+                                  itemCount: cubit
+                                      .similarModel!
+                                      .similar!
+                                      .results!
+                                      .length,
+                                ),
                               ),
+                            ],
+                          ),
                           fallback: (context) => SizedBox(),
                         ),
                       ],
