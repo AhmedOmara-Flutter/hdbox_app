@@ -24,9 +24,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MoviesCubit, MoviesState>(
-      listener: (context, state) {
-
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var cubit = MoviesCubit.get(context);
         if (cubit.popularModel == null &&
@@ -50,43 +48,50 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         MovieCarousel(movies: cubit.trendingModel!.results!),
                         BuildActionButtonRow(
+                          icon: cubit.isInWatchList(
+                            movieId: cubit
+                                .trendingModel!
+                                .results![cubit.indexIteration]
+                                .id!,
+                            mediaType: 'movie',
+                          )?Icons.done:Icons.add,
                           myListPressed: () {
-                            cubit.addToWatchList(
-                              movieId: cubit.trendingModel!.results![cubit
-                                  .indexIteration].id!,
-                              mediaType: 'movie',
-                              name:
-                              cubit
+                            cubit.toggleWatchlist(
+                              movieId: cubit
                                   .trendingModel!
                                   .results![cubit.indexIteration]
-                                  .title ??
+                                  .id!,
+                              mediaType: 'movie',
+                              name:
+                                  cubit
+                                      .trendingModel!
+                                      .results![cubit.indexIteration]
+                                      .title ??
                                   '',
                               posterPath:
-                              '${cubit.trendingModel!.results![cubit
-                                  .indexIteration].posterPath ??
-                                  cubit.trendingModel!.results![cubit
-                                      .indexIteration].backdropPath}',
+                                  '${cubit.trendingModel!.results![cubit.indexIteration].posterPath ?? cubit.trendingModel!.results![cubit.indexIteration].backdropPath}',
                               backdropPath:
-                              '${cubit.trendingModel!.results![cubit
-                                  .indexIteration].backdropPath ??
-                                  cubit.trendingModel!.results![cubit
-                                      .indexIteration].posterPath}',
-                              overview: '${cubit.trendingModel!.results![cubit
-                                  .indexIteration].overview}',
+                                  '${cubit.trendingModel!.results![cubit.indexIteration].backdropPath ?? cubit.trendingModel!.results![cubit.indexIteration].posterPath}',
+                              overview:
+                                  '${cubit.trendingModel!.results![cubit.indexIteration].overview}',
                             );
                           },
                           playPressed: () async {
-                          final movie= await cubit.getDetailsData(id: cubit.trendingModel!.results![cubit
-                              .indexIteration].id!);
-                          if (movie!.homepage == "") {
-                            showSnakeBar(color: ColorManager.red,
-                                context: context,
-                                label: 'No videos found');
-                          } else {
-                            launchUrl(
-                              Uri.parse(movie.homepage!),
+                            final movie = await cubit.getDetailsData(
+                              id: cubit
+                                  .trendingModel!
+                                  .results![cubit.indexIteration]
+                                  .id!,
                             );
-                          }
+                            if (movie!.homepage == "") {
+                              showSnakeBar(
+                                color: ColorManager.red,
+                                context: context,
+                                label: 'No videos found',
+                              );
+                            } else {
+                              launchUrl(Uri.parse(movie.homepage!));
+                            }
                           },
                           infoPressed: () {
                             navigateTo(
@@ -109,39 +114,37 @@ class HomeScreen extends StatelessWidget {
               //Most Popular Movies
               ConditionalBuilder(
                 condition: cubit.popularModel != null,
-                builder: (context) =>
-                    MoviesHorizontalSection(
-                      title: 'Most Popular',
-                      onSeeAll: () {
-                        navigateTo(
-                          context,
-                          SeeAllScreen(
-                            title: 'Most Popular Movies',
-                            movies: cubit.popularModel!.results!,
-                          ),
-                        );
-                      },
-                      movies: cubit.popularModel!.results!,
-                    ),
+                builder: (context) => MoviesHorizontalSection(
+                  title: 'Most Popular',
+                  onSeeAll: () {
+                    navigateTo(
+                      context,
+                      SeeAllScreen(
+                        title: 'Most Popular Movies',
+                        movies: cubit.popularModel!.results!,
+                      ),
+                    );
+                  },
+                  movies: cubit.popularModel!.results!,
+                ),
                 fallback: (context) => BuildFullBack(),
               ),
               // UpComing Row Movies
               ConditionalBuilder(
                 condition: cubit.upcomingModel != null,
-                builder: (context) =>
-                    MoviesHorizontalSection(
-                      title: 'UpComing',
-                      onSeeAll: () {
-                        navigateTo(
-                          context,
-                          SeeAllScreen(
-                            title: 'UpComing Movies',
-                            movies: cubit.upcomingModel!.results!,
-                          ),
-                        );
-                      },
-                      movies: cubit.upcomingModel!.results!,
-                    ),
+                builder: (context) => MoviesHorizontalSection(
+                  title: 'UpComing',
+                  onSeeAll: () {
+                    navigateTo(
+                      context,
+                      SeeAllScreen(
+                        title: 'UpComing Movies',
+                        movies: cubit.upcomingModel!.results!,
+                      ),
+                    );
+                  },
+                  movies: cubit.upcomingModel!.results!,
+                ),
                 fallback: (context) => BuildFullBack(),
               ),
               //Popular Network Row Header
@@ -161,59 +164,38 @@ class HomeScreen extends StatelessWidget {
                 child: ListView.separated(
                   padding: EdgeInsets.symmetric(horizontal: 10.0),
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) =>
-                      BuildNetworkCard(
-                        onTap: () {
-                          navigateTo(
-                            context,
-                            NetworkDetailsScreen(
-                              popularNetworkModel: popularNetworkModel[index],
-                            ),
-                          );
-                        },
-                        title: popularNetworkModel[index].title,
-                        image: popularNetworkModel[index].image,
-                      ),
+                  itemBuilder: (context, index) => BuildNetworkCard(
+                    onTap: () {
+                      navigateTo(
+                        context,
+                        NetworkDetailsScreen(
+                          popularNetworkModel: popularNetworkModel[index],
+                        ),
+                      );
+                    },
+                    title: popularNetworkModel[index].title,
+                    image: popularNetworkModel[index].image,
+                  ),
                   separatorBuilder: (context, index) => SizedBox(width: 10.0),
                   itemCount: popularNetworkModel.length,
                 ),
               ),
-              //Now Playing  Movies
-              ConditionalBuilder(
-                condition: cubit.nowPlayingModel != null,
-                builder: (context) =>
-                    MoviesHorizontalSection(
-                      title: 'Now Playing',
-                      onSeeAll: () {
-                        navigateTo(
-                          context,
-                          SeeAllScreen(
-                            title: 'Now Playing Movies',
-                            movies: cubit.nowPlayingModel!.results!,
-                          ),
-                        );
-                      },
-                      movies: cubit.nowPlayingModel!.results!,
-                    ),
-                fallback: (context) => BuildFullBack(),
-              ),
               //Top Rated Movies
               ConditionalBuilder(
                 condition: cubit.topRatedModel != null,
-                builder: (context) =>
-                    MoviesHorizontalSection(
-                      title: 'Top Rated',
-                      onSeeAll: () {
-                        navigateTo(
-                          context,
-                          SeeAllScreen(
-                            title: 'Top Rated Movies',
-                            movies: cubit.topRatedModel!.results!,
-                          ),
-                        );
-                      },
-                      movies: cubit.topRatedModel!.results!,
-                    ),
+                builder: (context) => MoviesHorizontalSection(
+                  title: 'Top Rated',
+                  onSeeAll: () {
+                    navigateTo(
+                      context,
+                      SeeAllScreen(
+                        title: 'Top Rated Movies',
+                        movies: cubit.topRatedModel!.results!,
+                      ),
+                    );
+                  },
+                  movies: cubit.topRatedModel!.results!,
+                ),
                 fallback: (context) => BuildFullBack(),
               ),
             ],

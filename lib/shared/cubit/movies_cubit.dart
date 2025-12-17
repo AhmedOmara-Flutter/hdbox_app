@@ -40,8 +40,8 @@ class MoviesCubit extends Cubit<MoviesState> {
   var pageController = PageController();
 
   int currentIndex = 0;
-  // int carousalIndex = 0;
-  int indexIteration=0;
+
+  int indexIteration = 0;
   String searchText = '';
   bool isLast = false;
 
@@ -59,6 +59,11 @@ class MoviesCubit extends Cubit<MoviesState> {
     AppBar(backgroundColor: Colors.purple),
     AppBar(backgroundColor: Colors.green),
   ];
+//todo
+  void changeCarousel(int index) {
+    indexIteration = index;
+    emit(ChangeCarouselState());
+  }
 
   void changeBottomNavBar(int index) {
     if (index == 3) {
@@ -621,11 +626,13 @@ class MoviesCubit extends Cubit<MoviesState> {
   }
 
   ////////////////////////////////Add to Watchlist ///////////////////////////////
-  bool isLoaded = false;
   List<WatchlistModel> watchlist = [];
   List<WatchlistModel> filteredWatchList = [];
   String selectedType = 'movie'; // default
   bool isWatchlistLoading = false;
+
+  //todo
+  Map<String, bool> watchlistMap = {};
 
   Future<void> addToWatchList({
     required int movieId,
@@ -636,7 +643,6 @@ class MoviesCubit extends Cubit<MoviesState> {
     required String overview,
   }) async {
     emit(AddToWatchListLoadingState());
-    isLoaded = false;
     await FirebaseFirestore.instance
         .collection('users')
         .doc(Constants.uId)
@@ -652,7 +658,6 @@ class MoviesCubit extends Cubit<MoviesState> {
           'addedAt': FieldValue.serverTimestamp(),
         })
         .then((value) {
-          isLoaded = true;
           emit(AddToWatchListSuccessState(mediaType: mediaType));
         })
         .catchError((error) {
@@ -664,6 +669,7 @@ class MoviesCubit extends Cubit<MoviesState> {
     isWatchlistLoading = true;
     emit(GetWatchListLoadingState());
     watchlist.clear();
+    watchlistMap.clear();
     filteredWatchList.clear();
     await FirebaseFirestore.instance
         .collection('users')
@@ -673,7 +679,11 @@ class MoviesCubit extends Cubit<MoviesState> {
         .get()
         .then((value) {
           value.docs.forEach((element) {
-            watchlist.add(WatchlistModel.fromJson(element.data()));
+            final model = WatchlistModel.fromJson(element.data());
+            watchlist.add(model);
+            //todo
+            watchlistMap['${model.mediaType}_${model.movieId}'] = true;
+            print(watchlistMap);
           });
           filteredWatchListFun(type: selectedType);
           isWatchlistLoading = false;
@@ -714,5 +724,46 @@ class MoviesCubit extends Cubit<MoviesState> {
         .catchError((error) {
           emit(DeleteWatchListErrorState(error: error.toString()));
         });
+  }
+
+  bool isInWatchList({required int movieId, required String mediaType}) {
+    final key = '${mediaType}_$movieId';
+    return watchlistMap[key] ?? false;
+  }
+
+  Future<void> toggleWatchlist({
+    required int movieId,
+    required String mediaType,
+    required String name,
+    required String posterPath,
+    required String backdropPath,
+    required String overview,
+  }) async {
+    final key = '${mediaType}_$movieId';
+    final isInWatchList = watchlistMap[key] == true;
+
+    watchlistMap[key] = !isInWatchList;
+    emit(ChangeWatchListLocalState());
+
+    try {
+      if (isInWatchList) {
+        //  DELETE
+        await deleteWatchList(mediaType: mediaType, movieId: movieId);
+      } else {
+        //  ADD
+        await addToWatchList(
+          movieId: movieId,
+          mediaType: mediaType,
+          name: name,
+          posterPath: posterPath,
+          backdropPath: backdropPath,
+          overview: overview,
+        );
+      }
+    } catch (e) {
+      // rollback لو حصل error
+      watchlistMap[key] = isInWatchList;
+      emit(ChangeWatchListErrorState(error: e.toString()));
+    }
   }
 }

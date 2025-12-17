@@ -171,7 +171,7 @@ class BuildEpisodeCard extends StatelessWidget {
                                 ),
                                 child: Text(
                                   cubit.episodeModel!.episodes![index].name ??
-                                      'No title available',
+                                      'Untitled',
                                   style: GoogleFonts.poppins(
                                     color: Colors.white,
                                     fontSize: 16,
@@ -184,7 +184,7 @@ class BuildEpisodeCard extends StatelessWidget {
                                   horizontal: 12,
                                 ),
                                 child: Text(
-                                  '${cubit.episodeModel!.episodes![index].overview ?? 'No overview available'}',
+                                  cubit.episodeModel!.episodes![index].overview ?? 'Untitled',
                                   maxLines: 4,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.poppins(
@@ -204,7 +204,7 @@ class BuildEpisodeCard extends StatelessWidget {
                                   children: [
                                     infoItem(
                                       Icons.star,
-                                      "${cubit.episodeModel!.episodes![index].voteAverage!.toStringAsFixed(1).toString()}",
+                                      cubit.episodeModel!.episodes![index].voteAverage!.toStringAsFixed(1).toString(),
                                     ),
                                     infoItem(
                                       Icons.timer,
@@ -212,7 +212,7 @@ class BuildEpisodeCard extends StatelessWidget {
                                     ),
                                     infoItem(
                                       Icons.calendar_today,
-                                      "${cubit.episodeModel!.episodes![index].airDate ?? 'inValid date'}",
+                                      cubit.episodeModel!.episodes![index].airDate ?? 'Unknown year',
                                     ),
                                     infoItem(Icons.live_tv, "HD"),
                                   ],

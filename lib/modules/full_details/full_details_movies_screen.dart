@@ -13,7 +13,6 @@ import '../../shared/components/cards/build_cast_item.dart';
 import '../../shared/components/cards/build_movie_card.dart';
 import '../../shared/components/layout/build_full_back.dart';
 import '../../shared/components/layout/build_image_screen.dart';
-import '../../shared/components/lists/build_snackbar.dart';
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
@@ -25,7 +24,8 @@ class FullDetailsMoviesScreen extends StatefulWidget {
   const FullDetailsMoviesScreen({super.key, required this.movieId});
 
   @override
-  State<FullDetailsMoviesScreen> createState() => _FullDetailsMoviesScreenState();
+  State<FullDetailsMoviesScreen> createState() =>
+      _FullDetailsMoviesScreenState();
 }
 
 class _FullDetailsMoviesScreenState extends State<FullDetailsMoviesScreen> {
@@ -37,22 +37,12 @@ class _FullDetailsMoviesScreenState extends State<FullDetailsMoviesScreen> {
     MoviesCubit.get(context).getCreditsData(id: widget.movieId);
     MoviesCubit.get(context).getSimilarData(id: widget.movieId);
   }
+
   @override
   Widget build(BuildContext context) {
     var cubit = MoviesCubit.get(context);
     return BlocConsumer<MoviesCubit, MoviesState>(
-      listener: (context, state) {
-        if (state is AddToWatchListSuccessState) {
-          return BuildSnackBar.showWatchlistSnackBar(
-            context: context,
-            message: 'Added to watchlist',
-            buttonText: 'VIEW',
-            onPressed: () {
-              navigateTo(context, WatchlistScreen());
-            },
-          );
-        }
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         if (cubit.detailsModel == null) {
           return Scaffold(
@@ -77,8 +67,9 @@ class _FullDetailsMoviesScreenState extends State<FullDetailsMoviesScreen> {
                     builder: (context) => BuildImageScreen(
                       image:
                           cubit.detailsModel!.backdropPath ??
-                          cubit.detailsModel!.posterPath??'',
-                      title: cubit.detailsModel!.title ?? 'No title',
+                          cubit.detailsModel!.posterPath ??
+                          '',
+                      title: cubit.detailsModel!.title ?? 'Untitled',
                       voteAverage: cubit.detailsModel!.voteAverage!
                           .toStringAsFixed(1)
                           .toString(),
@@ -139,9 +130,15 @@ class _FullDetailsMoviesScreenState extends State<FullDetailsMoviesScreen> {
                               ),
                               ActionButtonItem(
                                 label: 'My List',
-                                icon: Icons.add,
+                                icon:
+                                    cubit.isInWatchList(
+                                      movieId: cubit.detailsModel!.id!,
+                                      mediaType: 'movie',
+                                    )
+                                    ? Icons.done
+                                    : Icons.add,
                                 onPressed: () {
-                                  cubit.addToWatchList(
+                                  cubit.toggleWatchlist(
                                     movieId: cubit.detailsModel!.id!,
                                     name:
                                         cubit.detailsModel!.title ?? 'No title',
@@ -198,7 +195,7 @@ class _FullDetailsMoviesScreenState extends State<FullDetailsMoviesScreen> {
                                           context,
                                           PersonDataMovies(
                                             id: credit.id!,
-                                            name: credit.name??'',
+                                            name: credit.name ?? '',
                                           ),
                                         );
                                       },

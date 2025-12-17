@@ -23,11 +23,16 @@ class AppRoot extends StatelessWidget {
             backgroundColor: ColorManager.baseColor,
             elevation: 0.0,
           ),
+          //todo
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: ColorManager.white,
             selectionColor: ColorManager.white.withOpacity(0.3),
             selectionHandleColor: ColorManager.white,
           ),
+          //todo
+          splashColor: Colors.transparent,
+          hoverColor: Colors.transparent,
+          highlightColor: Colors.transparent,
         ),
         home: startWidget(uId: uId),
       ),

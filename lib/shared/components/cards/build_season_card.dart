@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../effects/build_shimmer.dart';
+import '../utils/function.dart';
 
 class BuildSeasonCard extends StatelessWidget {
   final String image;
@@ -95,7 +96,7 @@ class BuildSeasonCard extends StatelessWidget {
                     ],
                   ),
 
-                  SizedBox(height: 4),
+                  SizedBox(height:6),
 
                   Row(
                     children: [
@@ -103,11 +104,7 @@ class BuildSeasonCard extends StatelessWidget {
                       SizedBox(width: 3),
                       Text(
                         voteAverage,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: style(14.0),
                       ),
                     ],
                   ),

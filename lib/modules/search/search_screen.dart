@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hdbox_app/modules/search/search_info_row.dart';
 import 'package:hdbox_app/modules/search/top_search_item.dart';
+import 'package:hdbox_app/shared/components/layout/build_full_back.dart';
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
@@ -108,7 +109,7 @@ class SearchScreen extends StatelessWidget {
                               ),
                             );
                           },
-                          itemCount: cubit.multiSearchModel!.results!.length,
+                          itemCount: cubit.multiSearchModel!.results.length,
                         ),
                       ),
                       fallback: (context) => Center(
@@ -137,7 +138,7 @@ class SearchScreen extends StatelessWidget {
                     ),
                   if (cubit.searchText.isEmpty)
                     ConditionalBuilder(
-                      condition: cubit.topSearchModel != null,
+                      condition: cubit.nowPlayingModel != null,
                       builder: (context) => Expanded(
                         child: ListView.separated(
                           itemBuilder: (context, index) => TopSearchItem(
@@ -146,23 +147,23 @@ class SearchScreen extends StatelessWidget {
                                 context,
                                 FullDetailsMoviesScreen(
                                   movieId:
-                                      cubit.topSearchModel!.results![index].id!,
+                                      cubit.nowPlayingModel!.results![index].id!,
                                 ),
                               );
                             },
                             image: cubit
-                                .topSearchModel!
+                                .nowPlayingModel!
                                 .results![index]
                                 .posterPath!,
-                            title: cubit.topSearchModel!.results![index].title!,
+                            title: cubit.nowPlayingModel!.results![index].title!,
                           ),
                           separatorBuilder: (context, index) =>
                               SizedBox(height: 20.0),
-                          itemCount: cubit.topSearchModel!.results!.length,
+                          itemCount: cubit.nowPlayingModel!.results!.length,
                         ),
                       ),
                       fallback: (context) =>
-                          CircularProgressIndicator(color: ColorManager.red),
+                          BuildFullBack(),
                     ),
                 ],
               ),

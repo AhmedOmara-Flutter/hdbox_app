@@ -19,10 +19,13 @@ class MoviesHomeLayout extends StatelessWidget {
           return BuildSnackBar.showWatchlistSnackBar(
             context: context,
             message: 'Added to watchlist',
-            buttonText: 'VIEW',
-            onPressed: () {
-              navigateTo(context, WatchlistScreen());
-            },
+          );
+
+        }
+        if(state is DeleteWatchListSuccessState){
+          return BuildSnackBar.showWatchlistSnackBar(
+            context: context,
+            message: 'Deleted From watchlist',
           );
         }
       },

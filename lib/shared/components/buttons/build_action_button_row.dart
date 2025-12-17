@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../styles/colors.dart';
 
 class BuildActionButtonRow extends StatelessWidget {
+  final IconData icon;
   final VoidCallback myListPressed;
   final VoidCallback playPressed;
   final VoidCallback infoPressed;
@@ -11,7 +12,7 @@ class BuildActionButtonRow extends StatelessWidget {
     super.key,
     required this.myListPressed,
     required this.playPressed,
-    required this.infoPressed,
+    required this.infoPressed, required this.icon,
   });
 
   @override
@@ -23,7 +24,7 @@ class BuildActionButtonRow extends StatelessWidget {
           onTap: myListPressed,
           child: Column(
             children: [
-              Icon(Icons.add, color: ColorManager.white),
+              Icon(icon, color: ColorManager.white),
               Text('My List', style: TextStyle(color: ColorManager.white)),
             ],
           ),
@@ -35,7 +36,7 @@ class BuildActionButtonRow extends StatelessWidget {
               borderRadius: BorderRadius.circular(5.0),
             ),
           ),
-          icon: Icon(Icons.add, color: ColorManager.white),
+          icon: Icon(Icons.play_arrow, color: ColorManager.white),
           onPressed: playPressed,
           label: Text('Play', style: TextStyle(color: ColorManager.white)),
         ),

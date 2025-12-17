@@ -5,8 +5,6 @@ class BuildSnackBar {
   static void showWatchlistSnackBar({
     required BuildContext context,
     required String message,
-    VoidCallback? onPressed,
-     String ?buttonText,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -16,26 +14,33 @@ class BuildSnackBar {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         content: Row(
           children: [
-            Expanded(
-              child: Text(
-                message,
-                style: TextStyle(color: Colors.white, fontSize: 14),
-              ),
-            ),
-            if (onPressed != null && buttonText != null)
-              TextButton(
-                onPressed: onPressed,
-                child: Text(
-                  buttonText,
-                  style: TextStyle(
-                    color: ColorManager.red,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            Image.asset('images/hd.png', height: 25.0, width: 45.0),
+            Text(message, style: TextStyle(color: Colors.white, fontSize: 14)),
           ],
         ),
       ),
     );
   }
 }
+
+//Row(
+//           children: [
+//             Expanded(
+//               child: Text(
+//                 message,
+//                 style: TextStyle(color: Colors.white, fontSize: 14),
+//               ),
+//             ),
+//             if (onPressed != null && buttonText != null)
+//               TextButton(
+//                 onPressed: onPressed,
+//                 child: Text(
+//                   buttonText,
+//                   style: TextStyle(
+//                     color: ColorManager.red,
+//                     fontWeight: FontWeight.bold,
+//                   ),
+//                 ),
+//               ),
+//           ],
+//         )

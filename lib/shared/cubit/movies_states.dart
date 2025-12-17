@@ -3,6 +3,7 @@ abstract class MoviesState {}
 class InitialState extends MoviesState {}
 
 class ChangeBottomNavBarState extends MoviesState {}
+class ChangeCarouselState extends MoviesState {}
 
 class ChangeOnBoardingSlidesState extends MoviesState {}
 
@@ -297,3 +298,11 @@ class DeleteWatchListErrorState extends MoviesState {
 
   DeleteWatchListErrorState({required this.error});
 }
+
+class ChangeWatchListErrorState extends MoviesState {
+  final String? error;
+
+  ChangeWatchListErrorState({required this.error});
+}
+
+class ChangeWatchListLocalState extends MoviesState {}
