@@ -1,14 +1,11 @@
 import 'dart:ui';
-
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hdbox_app/modules/auth/register/register_cubit/register_cubit.dart';
 import 'package:hdbox_app/modules/auth/register/register_cubit/register_states.dart';
 import 'package:hdbox_app/shared/components/layout/build_full_back.dart';
-
 import '../../../shared/components/buttons/build_play_button.dart';
 import '../../../shared/components/forms/build_text_form_field.dart';
 import '../../../shared/components/utils/function.dart';
@@ -16,7 +13,7 @@ import '../../../shared/styles/colors.dart';
 import '../login/login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
-  RegisterScreen({super.key});
+  const RegisterScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -102,7 +99,7 @@ class RegisterScreen extends StatelessWidget {
                             children: [
                               SizedBox(height: 100.0),
                               Text("Create Account", style: style(32.0)),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 13),
                               Text(
                                 "Join us & enjoy unlimited movies and shows.",
                                 style: style(15.0),
@@ -154,7 +151,7 @@ class RegisterScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Already have an account? ',
-                                    style: style(14.0),
+                                    style: style(13.0),
                                   ),
                                   InkWell(
                                     onTap: () {
@@ -162,10 +159,7 @@ class RegisterScreen extends StatelessWidget {
                                     },
                                     child: Text(
                                       'Login',
-                                      style: TextStyle(
-                                        color: ColorManager.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: style(15.0,color: ColorManager.red),
                                     ),
                                   ),
                                 ],

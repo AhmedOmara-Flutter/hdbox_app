@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hdbox_app/shared/components/utils/function.dart';
 
 import '../../styles/colors.dart';
 
@@ -21,11 +22,7 @@ class SectionHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: ColorManager.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 18.0,
-            ),
+            style: style(16.0),
           ),
           TextButton(
             onPressed: onPressed,

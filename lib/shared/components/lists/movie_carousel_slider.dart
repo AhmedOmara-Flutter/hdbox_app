@@ -66,7 +66,6 @@ class MovieCarousel extends StatelessWidget {
             aspectRatio: 16 / 9,
             scrollDirection: Axis.horizontal,
             onPageChanged: (index, _) {
-              //cubit.carousalIndex = movies[index].id;
               //todo
             cubit.changeCarousel(index);
             },

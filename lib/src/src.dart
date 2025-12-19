@@ -34,7 +34,7 @@ class AppRoot extends StatelessWidget {
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        home: startWidget(uId: uId),
+        home: SplashScreen(uId: uId),
       ),
     );
   }

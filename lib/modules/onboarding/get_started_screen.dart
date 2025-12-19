@@ -109,7 +109,7 @@ class GetStartedScreen extends StatelessWidget {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            navigateTo(context, LoginScreen(),isReplacement: true);
+                            navigateTo(context, LoginScreen());
                           },
                           child: Container(
                             padding: EdgeInsets.symmetric(

@@ -23,7 +23,7 @@ class WatchlistModel {
     mediaType = json['mediaType'];
     movieId = json['movieId'];
     addedAt = json['addedAt'];
-    posterPath = json['image'];
+    posterPath = json['posterPath'];
     overview = json['overview'];
     name = json['name'];
     backdropPath = json['backdropPath'];
@@ -34,7 +34,7 @@ class WatchlistModel {
       'mediaType': mediaType,
       'movieId': movieId,
       'addedAt': addedAt,
-      'image': posterPath,
+      'posterPath': posterPath,
       'overview': overview,
       'name': name,
       'backdropPath': backdropPath

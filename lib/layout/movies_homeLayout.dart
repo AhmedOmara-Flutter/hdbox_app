@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../modules/watchlist/watchlist_screen.dart';
 import '../shared/components/lists/build_snackbar.dart';
-import '../shared/components/utils/function.dart';
 import '../shared/cubit/movies_cubit.dart';
 import '../shared/cubit/movies_states.dart';
 import '../shared/styles/colors.dart';
@@ -72,7 +70,6 @@ class MoviesHomeLayout extends StatelessWidget {
                 ),
               ],
             ),
-            //appBar: cubit.appBars[cubit.currentIndex],
             body: cubit.screens[cubit.currentIndex],
           ),
         );

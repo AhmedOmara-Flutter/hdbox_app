@@ -25,6 +25,7 @@ class MoviesHorizontalSection extends StatelessWidget {
         SizedBox(
           height: 180.0,
           child: ListView.separated(
+
             shrinkWrap: true,
             padding: EdgeInsets.symmetric(horizontal: 10.0),
             scrollDirection: Axis.horizontal,
@@ -33,7 +34,7 @@ class MoviesHorizontalSection extends StatelessWidget {
                 var movieId = movies[index].id;
                 navigateTo(context, FullDetailsMoviesScreen(movieId: movieId!));
               },
-              image: movies[index].posterPath!,
+              image: movies[index].posterPath??movies[index].backdropPath??'',
             ),
             separatorBuilder: (context, index) => SizedBox(width: 10.0),
             itemCount: movies.length,

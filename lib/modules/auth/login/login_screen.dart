@@ -25,17 +25,15 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginStates>(
         listener: (context, state) {
           if (state is LoginSuccessState) {
-            CacheHelper.saveData(key: 'uId', value: state.uId).then((value){
-              Constants.uId=state.uId;
-              print(state.uId);
-              print(value);
+            CacheHelper.saveData(key: 'uId', value: state.uId).then((value) {
+              Constants.uId = state.uId;
             });
             showSnakeBar(
               context: context,
               label: 'Welcome back! You are now logged in.',
               color: Colors.green,
             );
-            navigateTo(context, MoviesHomeLayout(),isReplacement: true);
+            navigateTo(context, MoviesHomeLayout(), isReplacement: true);
           }
           if (state is LoginErrorState) {
             showSnakeBar(
@@ -105,15 +103,11 @@ class LoginScreen extends StatelessWidget {
                           Column(
                             children: [
                               SizedBox(height: 100.0),
-                              const Text(
+                               Text(
                                 "Welcome Back",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: style(32.0),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 13),
                               Text(
                                 "Login to continue watching your favorite movies.",
                                 style: style(15.0),
@@ -143,18 +137,14 @@ class LoginScreen extends StatelessWidget {
                                 alignment: Alignment.centerRight,
                                 child: Text(
                                   "Forgot Password?",
-                                  style: TextStyle(
-                                    color: ColorManager.red,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                  style: style(13.0,color: ColorManager.red),
                                 ),
                               ),
                               const SizedBox(height: 28),
                               ConditionalBuilder(
                                 condition: state is! LoginLoadingState,
                                 builder: (context) => BuildPlayButton(
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     await cubit.userLogin(
                                       email: cubit.emailController.text,
                                       password: cubit.passwordController.text,
@@ -170,7 +160,7 @@ class LoginScreen extends StatelessWidget {
                                 children: [
                                   Text(
                                     'Don’t have an account? ',
-                                    style: style(14.0),
+                                    style: style(13.0),
                                   ),
                                   InkWell(
                                     onTap: () {
@@ -178,10 +168,7 @@ class LoginScreen extends StatelessWidget {
                                     },
                                     child: Text(
                                       'Sign Up',
-                                      style: TextStyle(
-                                        color: ColorManager.red,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                      style: style(15.0,color: ColorManager.red),
                                     ),
                                   ),
                                 ],

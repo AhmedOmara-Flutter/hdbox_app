@@ -63,9 +63,9 @@ Widget shadowBellowPhoto({required double shadow}) {
   );
 }
 
-TextStyle style(double fontSize) {
+TextStyle style(double fontSize,{Color color=Colors.white}) {
   return TextStyle(
-    color: ColorManager.white,
+    color:color,
     fontSize: fontSize,
     fontWeight: FontWeight.bold,
     height: 1.1,
@@ -96,16 +96,15 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnakeBar({
   );
 }
 
-Widget startWidget({required String uId}) {
-  Widget? widget;
-  print(uId);
-  if (uId.isNotEmpty) {
-    widget = MoviesHomeLayout();
-  } else {
-    widget = SplashScreen();
-  }
-  return widget;
-}
+// Widget startWidget({required String uId}) {
+//   Widget? widget;
+//   if (uId.isNotEmpty) {
+//     widget = MoviesHomeLayout();
+//   } else {
+//     widget = SplashScreen();
+//   }
+//   return widget;
+// }
 
 Widget emptyWatchlistMessage(String type) {
   return Center(

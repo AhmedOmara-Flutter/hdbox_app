@@ -40,7 +40,6 @@ class MoviesCubit extends Cubit<MoviesState> {
   var pageController = PageController();
 
   int currentIndex = 0;
-
   int indexIteration = 0;
   String searchText = '';
   bool isLast = false;
@@ -676,23 +675,20 @@ class MoviesCubit extends Cubit<MoviesState> {
         .doc(Constants.uId)
         .collection('watchlist')
         .orderBy('addedAt', descending: true)
-        .get()
-        .then((value) {
-          value.docs.forEach((element) {
-            final model = WatchlistModel.fromJson(element.data());
-            watchlist.add(model);
-            //todo
-            watchlistMap['${model.mediaType}_${model.movieId}'] = true;
-            print(watchlistMap);
-          });
-          filteredWatchListFun(type: selectedType);
-          isWatchlistLoading = false;
-          emit(GetWatchListSuccessState());
-        })
-        .catchError((error) {
-          isWatchlistLoading = false;
-          emit(GetWatchListErrorState(error: error.toString()));
-        });
+        .snapshots().listen((value){
+      watchlist.clear();
+
+      value.docs.forEach((element) {
+        final model = WatchlistModel.fromJson(element.data());
+        watchlist.add(model);
+        //todo
+        watchlistMap['${model.mediaType}_${model.movieId}'] = true;
+        print(watchlistMap);
+      });
+      filteredWatchListFun(type: selectedType);
+      isWatchlistLoading = false;
+      emit(GetWatchListSuccessState());
+    });
   }
 
   void filteredWatchListFun({required String type}) {
