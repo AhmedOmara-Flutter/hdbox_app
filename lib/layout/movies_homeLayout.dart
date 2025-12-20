@@ -70,7 +70,11 @@ class MoviesHomeLayout extends StatelessWidget {
                 ),
               ],
             ),
-            body: cubit.screens[cubit.currentIndex],
+            //todo وحبيت اروح لمكان تاني في الشاشه ارجع الاقي مكانه مرجع من الاول  in home ده عشان انا في
+            body: IndexedStack(
+              index: cubit.currentIndex,
+              children: cubit.screens,
+            ),
           ),
         );
       },

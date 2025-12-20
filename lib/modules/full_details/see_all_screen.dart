@@ -27,11 +27,7 @@ class SeeAllScreen extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: TextStyle(
-            color: ColorManager.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18.0,
-          ),
+          style: style(18.0),
         ),
       ),
       body: GridView.count(

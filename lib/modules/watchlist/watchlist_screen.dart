@@ -31,16 +31,7 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<MoviesCubit, MoviesState>(
-      listener: (context, state) {
-        // TODO: implement listener
-        if (state is DeleteWatchListSuccessState) {
-          BuildSnackBar.showWatchlistSnackBar(
-            context: context,
-            message: 'Removed from watchlist',
-          );
-        }
-      },
+    return BlocBuilder<MoviesCubit, MoviesState>(
       builder: (context, state) {
         var cubit = MoviesCubit.get(context);
         if (cubit.isWatchlistLoading) {

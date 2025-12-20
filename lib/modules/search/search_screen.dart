@@ -11,8 +11,22 @@ import '../../shared/styles/colors.dart';
 import '../full_details/full_details_movies_screen.dart';
 import '../full_details/full_details_tv_movies_screen.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  var searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    searchController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +73,7 @@ class SearchScreen extends StatelessWidget {
                     ),
                     margin: const EdgeInsets.only(top: 15.0),
                     child: TextFormField(
+                      controller: searchController,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -70,6 +85,17 @@ class SearchScreen extends StatelessWidget {
                         ),
                         hintText: 'Enter here to search a movie',
                         hintStyle: TextStyle(color: ColorManager.white),
+                        suffixIcon:cubit.searchText.isNotEmpty? IconButton(
+                          icon: Icon(
+                            Icons.close,
+                            color: ColorManager.white,
+                            size: 17.0,
+                          ),
+                          onPressed: () {
+                            searchController.clear();
+                            cubit.clearSearchField();
+                          },
+                        ):null,
                       ),
                       style: TextStyle(color: ColorManager.white),
                       onChanged: (value) {
@@ -86,7 +112,6 @@ class SearchScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final movie =
                                 cubit.multiSearchModel!.results[index];
-
                             return SearchInfoRow(
                               onTap: () {
                                 if (movie.isMovie) {
@@ -104,9 +129,7 @@ class SearchScreen extends StatelessWidget {
                                 }
                               },
                               title: movie.displayTitle,
-                              date: formatedYearDate(
-                                date: movie.displayDate,
-                              ),
+                              date: formatedYearDate(date: movie.displayDate),
                             );
                           },
                           itemCount: cubit.multiSearchModel!.results.length,
@@ -127,43 +150,38 @@ class SearchScreen extends StatelessWidget {
                   if (cubit.searchText.isEmpty)
                     Container(
                       margin: EdgeInsets.symmetric(vertical: 25.0),
-                      child: Text(
-                        'Top Searches',
-                        style: TextStyle(
-                          color: ColorManager.white,
-                          fontSize: 28.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      child: Text('Top Searches', style: style(27.0)),
                     ),
                   if (cubit.searchText.isEmpty)
                     ConditionalBuilder(
                       condition: cubit.nowPlayingModel != null,
                       builder: (context) => Expanded(
                         child: ListView.separated(
-                          itemBuilder: (context, index) => TopSearchItem(
-                            onTap: () {
-                              navigateTo(
-                                context,
-                                FullDetailsMoviesScreen(
-                                  movieId:
-                                      cubit.nowPlayingModel!.results![index].id!,
-                                ),
-                              );
-                            },
-                            image: cubit
-                                .nowPlayingModel!
-                                .results![index]
-                                .posterPath!,
-                            title: cubit.nowPlayingModel!.results![index].title!,
-                          ),
+                          itemBuilder: (context, index) {
+                            var movie = cubit.nowPlayingModel!.results![index];
+                            return TopSearchItem(
+                              onTap: () {
+                                navigateTo(
+                                  context,
+                                  FullDetailsMoviesScreen(movieId: movie.id!),
+                                );
+                              },
+                              image:
+                                  movie.posterPath ?? movie.backdropPath ?? '',
+                              title:
+                                  cubit
+                                      .nowPlayingModel!
+                                      .results![index]
+                                      .title ??
+                                  "Untitled",
+                            );
+                          },
                           separatorBuilder: (context, index) =>
                               SizedBox(height: 20.0),
                           itemCount: cubit.nowPlayingModel!.results!.length,
                         ),
                       ),
-                      fallback: (context) =>
-                          BuildFullBack(),
+                      fallback: (context) => BuildFullBack(),
                     ),
                 ],
               ),

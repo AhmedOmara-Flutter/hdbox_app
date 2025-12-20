@@ -32,7 +32,6 @@ class TopSearchItem extends StatelessWidget {
             child: ClipRRect(
               clipBehavior: Clip.antiAliasWithSaveLayer,
               borderRadius: BorderRadius.circular(10.0),
-
               child: CachedNetworkImage(
                 imageUrl: 'https://image.tmdb.org/t/p/w500/$image',
                 fit: BoxFit.cover,

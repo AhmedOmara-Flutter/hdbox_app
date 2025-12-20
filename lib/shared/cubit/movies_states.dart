@@ -5,6 +5,7 @@ class InitialState extends MoviesState {}
 class ChangeBottomNavBarState extends MoviesState {}
 class ChangeCarouselState extends MoviesState {}
 
+class ClearSearchFieldState extends MoviesState {}
 class ChangeOnBoardingSlidesState extends MoviesState {}
 
 class MoviesLoadedState extends MoviesState {}

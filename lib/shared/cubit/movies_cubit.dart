@@ -623,7 +623,11 @@ class MoviesCubit extends Cubit<MoviesState> {
     currentIndex = 0;
     emit(ResetCurrentIndexState());
   }
-
+void clearSearchField(){
+    searchText='';
+    multiSearchModel=null;
+    emit(ClearSearchFieldState());
+}
   ////////////////////////////////Add to Watchlist ///////////////////////////////
   List<WatchlistModel> watchlist = [];
   List<WatchlistModel> filteredWatchList = [];

@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hdbox_app/modules/full_details/see_all_screen.dart';
 import 'package:hdbox_app/modules/full_details/see_all_tv_images_screen.dart';
 import 'package:readmore/readmore.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,7 @@ import '../../shared/components/cards/build_season_card.dart';
 import '../../shared/components/layout/build_full_back.dart';
 import '../../shared/components/layout/build_image_screen.dart';
 import '../../shared/components/lists/build_snackbar.dart';
+import '../../shared/components/lists/movies_horizontal_section.dart';
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
@@ -66,15 +68,13 @@ class _FullDetailsTvMoviesScreenState extends State<FullDetailsTvMoviesScreen> {
                 children: [
                   ConditionalBuilder(
                     condition: cubit.tvMoviesModel != null,
-                    builder: (context) =>
-                        BuildImageScreen(
-                          image:
-                          '${cubit.tvMoviesModel!.backdropPath ??
-                              cubit.tvMoviesModel!.posterPath}',
-                          title: '${cubit.tvMoviesModel!.name}',
-                          season: '${cubit.tvMoviesModel!.numberOfSeasons}',
-                          episode: '${cubit.tvMoviesModel!.numberOfEpisodes}',
-                        ),
+                    builder: (context) => BuildImageScreen(
+                      image:
+                          '${cubit.tvMoviesModel!.backdropPath ?? cubit.tvMoviesModel!.posterPath}',
+                      title: '${cubit.tvMoviesModel!.name}',
+                      season: '${cubit.tvMoviesModel!.numberOfSeasons}',
+                      episode: '${cubit.tvMoviesModel!.numberOfEpisodes}',
+                    ),
                     fallback: (context) => BuildFullBack(),
                   ),
                   Padding(
@@ -112,22 +112,24 @@ class _FullDetailsTvMoviesScreenState extends State<FullDetailsTvMoviesScreen> {
                             children: [
                               ActionButtonItem(
                                 label: 'My List',
-                                icon: cubit.isInWatchList(
-                                    movieId: cubit.tvMoviesModel!.id!,
-                                    mediaType: 'tv') ? Icons.done:Icons.add,
+                                icon:
+                                    cubit.isInWatchList(
+                                      movieId: cubit.tvMoviesModel!.id!,
+                                      mediaType: 'tv',
+                                    )
+                                    ? Icons.done
+                                    : Icons.add,
                                 onPressed: () {
                                   cubit.toggleWatchlist(
                                     movieId: cubit.tvMoviesModel!.id!,
                                     name: cubit.tvMoviesModel!.name ?? '',
                                     mediaType: 'tv',
                                     posterPath:
-                                    '${cubit.tvMoviesModel!.posterPath ??
-                                        cubit.tvMoviesModel!.backdropPath}',
+                                        '${cubit.tvMoviesModel!.posterPath ?? cubit.tvMoviesModel!.backdropPath}',
                                     backdropPath:
-                                    '${cubit.tvMoviesModel!.backdropPath ??
-                                        cubit.tvMoviesModel!.posterPath}',
+                                        '${cubit.tvMoviesModel!.backdropPath ?? cubit.tvMoviesModel!.posterPath}',
                                     overview:
-                                    cubit.tvMoviesModel!.overview ?? '',
+                                        cubit.tvMoviesModel!.overview ?? '',
                                   );
                                 },
                               ),
@@ -172,126 +174,119 @@ class _FullDetailsTvMoviesScreenState extends State<FullDetailsTvMoviesScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 20.0),
                       child: ConditionalBuilder(
                         condition:
-                        cubit.tvMoviesModel != null &&
+                            cubit.tvMoviesModel != null &&
                             cubit.tvMoviesModel!.seasons != null &&
                             cubit.tvMoviesModel!.seasons!.isNotEmpty,
-                        builder: (context) =>
-                            SizedBox(
-                              height: 320.0,
-                              child: ListView.separated(
-                                padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  var tvShow = cubit.tvMoviesModel!
-                                      .seasons![index];
-                                  return BuildSeasonCard(
-                                    onTap: () {
-                                      navigateTo(
-                                        context,
-                                        BuildEpisodeCard(
-                                          id: cubit.tvMoviesModel!.id!,
-                                          seasonNumber: cubit
-                                              .tvMoviesModel!
-                                              .seasons![index]
-                                              .seasonNumber!,
-                                        ),
-                                      );
-                                    },
-                                    image: tvShow.posterPath ?? '',
-                                    season: tvShow.name ?? 'Untitled',
-                                    date: tvShow.airDate ?? "Unknown year",
-                                    numEpisodes: '${tvShow.episodeCount}',
-                                    voteAverage: tvShow.voteAverage!
-                                        .toStringAsFixed(1)
-                                        .toString(),
+                        builder: (context) => SizedBox(
+                          height: 320.0,
+                          child: ListView.separated(
+                            padding: EdgeInsets.symmetric(horizontal: 10.0),
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              var tvShow = cubit.tvMoviesModel!.seasons![index];
+                              return BuildSeasonCard(
+                                onTap: () {
+                                  navigateTo(
+                                    context,
+                                    BuildEpisodeCard(
+                                      id: cubit.tvMoviesModel!.id!,
+                                      seasonNumber: cubit
+                                          .tvMoviesModel!
+                                          .seasons![index]
+                                          .seasonNumber!,
+                                    ),
                                   );
                                 },
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(width: 10.0),
-                                itemCount: cubit.tvMoviesModel!.seasons!.length,
-                              ),
-                            ),
+                                image: tvShow.posterPath ?? '',
+                                season: tvShow.name ?? 'Untitled',
+                                date: tvShow.airDate ?? "Unknown year",
+                                numEpisodes: '${tvShow.episodeCount}',
+                                voteAverage: tvShow.voteAverage!
+                                    .toStringAsFixed(1)
+                                    .toString(),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                SizedBox(width: 10.0),
+                            itemCount: cubit.tvMoviesModel!.seasons!.length,
+                          ),
+                        ),
                         fallback: (context) => BuildFullBack(),
                       ),
                     ),
                   ConditionalBuilder(
                     condition:
-                    cubit.imagesTVModel != null &&
+                        cubit.imagesTVModel != null &&
                         cubit.imagesTVModel!.backdrops != null &&
                         cubit.imagesTVModel!.backdrops!.isNotEmpty,
-                    builder: (context) =>
-                        BuildPhotosHeaderCard(
-                          title: 'Photos',
-                          seeAll: () {
-                            navigateTo(
-                              context,
-                              SeeAllTVImagesScreen(
-                                title: '${cubit.tvMoviesModel!.name} Gallery',
-                                movies: cubit.imagesTVModel!.backdrops!,
-                              ),
-                            );
-                          },
-                          movies: cubit.imagesTVModel!.backdrops!,
-                        ),
+                    builder: (context) => BuildPhotosHeaderCard(
+                      title: 'Photos',
+                      seeAll: () {
+                        navigateTo(
+                          context,
+                          SeeAllTVImagesScreen(
+                            title: '${cubit.tvMoviesModel!.name} Gallery',
+                            movies: cubit.imagesTVModel!.backdrops!,
+                          ),
+                        );
+                      },
+                      movies: cubit.imagesTVModel!.backdrops!,
+                    ),
                     fallback: (context) => SizedBox(),
                   ),
                   SizedBox(height: 15.0),
                   ConditionalBuilder(
                     condition:
-                    cubit.similarTVModel != null &&
+                        cubit.similarTVModel != null &&
                         cubit.similarTVModel!.results != null &&
                         cubit.similarTVModel!.results!.isNotEmpty,
-                    builder: (context) =>
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0),
-                              child: Row(
-                                children: [Text('RELATED', style: style(16.0))],
-                              ),
+                    builder: (context) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                          child: Row(
+                            children: [Text('RELATED', style: style(16.0))],
+                          ),
+                        ),
+                        SizedBox(height: 15.0),
+                        SizedBox(
+                          height: 180.0,
+                          child: ListView.separated(
+                            padding: EdgeInsets.only(
+                              bottom: 10.0,
+                              left: 10.0,
+                              right: 10.0,
                             ),
-                            SizedBox(height: 15.0),
-                            SizedBox(
-                              height: 180.0,
-                              child: ListView.separated(
-                                padding: EdgeInsets.only(
-                                  bottom: 10.0,
-                                  left: 10.0,
-                                  right: 10.0,
-                                ),
-                                scrollDirection: Axis.horizontal,
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  final movie =
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemBuilder: (context, index) {
+                              final movie =
                                   cubit.similarTVModel!.results![index];
-                                  return BuildMovieCard(
-                                    onTap: () {
-                                      navigateTo(
-                                        context,
-                                        FullDetailsTvMoviesScreen(
-                                          movieId: movie.id!,
-                                        ),
-                                        isReplacement: true,
-                                      );
-                                    },
-                                    image:
-                                    '${movie.posterPath ?? movie.backdropPath}',
-                                    voteAverage: movie.voteAverage!
-                                        .toStringAsFixed(
-                                      1,
+                              return BuildMovieCard(
+                                onTap: () {
+                                  navigateTo(
+                                    context,
+                                    FullDetailsTvMoviesScreen(
+                                      movieId: movie.id!,
                                     ),
+                                    isReplacement: true,
                                   );
                                 },
-                                separatorBuilder: (context, index) =>
-                                    SizedBox(width: 10.0),
-                                itemCount: cubit.similarTVModel!.results!
-                                    .length,
-                              ),
-                            ),
-                          ],
+                                image:
+                                    '${movie.posterPath ?? movie.backdropPath}',
+                                voteAverage: movie.voteAverage!.toStringAsFixed(
+                                  1,
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) =>
+                                SizedBox(width: 10.0),
+                            itemCount: cubit.similarTVModel!.results!.length,
+                          ),
                         ),
+                      ],
+                    ),
                     fallback: (context) => SizedBox(),
                   ),
                 ],
