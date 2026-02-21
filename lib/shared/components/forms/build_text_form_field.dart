@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:hdbox_app/shared/styles/colors.dart';
 
 class BuildTextFormField extends StatelessWidget {
-  final String label;
+  final String? label;
+  final String? hint;
   final IconData icon;
+  final double contentPadding;
   final bool isPassword;
   final TextEditingController? controller;
   final TextInputType type;
@@ -12,13 +14,14 @@ class BuildTextFormField extends StatelessWidget {
 
   const BuildTextFormField({
     super.key,
-    required this.label,
+     this.label,
     required this.icon,
     this.isPassword = false,
     this.controller,
     this.type = TextInputType.emailAddress,
     this.suffixIcon,
     this.suffixOnPressed,
+    this.hint, this.contentPadding=15.0,
   });
 
   @override
@@ -38,13 +41,15 @@ class BuildTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: label,
           labelStyle: TextStyle(color: ColorManager.white),
+          hintText: hint,
+          hintStyle: TextStyle(color: ColorManager.white),
           prefixIcon: Icon(icon, color: ColorManager.white),
           suffixIcon: IconButton(
             onPressed: suffixOnPressed,
             icon: Icon(suffixIcon, color: ColorManager.white),
           ),
           border: InputBorder.none,
-          contentPadding: const EdgeInsets.symmetric(vertical: 15),
+          contentPadding:  EdgeInsets.symmetric(vertical: contentPadding),
         ),
       ),
     );

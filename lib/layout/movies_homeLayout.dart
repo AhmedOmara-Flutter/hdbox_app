@@ -30,54 +30,53 @@ class MoviesHomeLayout extends StatelessWidget {
       builder: (context, state) {
         var cubit = MoviesCubit.get(context);
         //todo مش فاهم منها حاجه بس من غيرها التطبيق لو واقف علي watchlist ورجعت هرجع لل profile ثم home
-        return PopScope(
-          canPop: false,
-          onPopInvoked: (didPop) {
-            if (didPop) return;
-            if (Navigator.of(context).canPop()) {
-              Navigator.of(context).pop();
-              return;
-            }
-            if (cubit.currentIndex != 0) {
-              cubit.changeBottomNavBar(0);
-              return;
-            }
-            Navigator.of(context).maybePop();
-          },
-          child: Scaffold(
-            bottomNavigationBar: BottomNavigationBar(
-              currentIndex: cubit.currentIndex,
-              type: BottomNavigationBarType.fixed,
-              onTap: (index) {
-                return cubit.changeBottomNavBar(index);
-              },
-              selectedItemColor: ColorManager.red,
-              unselectedItemColor: ColorManager.white,
-              backgroundColor: ColorManager.baseColor,
-              items: const [
-                BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.search),
-                  label: 'Search',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.grid_view_rounded),
-                  label: 'Categories',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person),
-                  label: 'Profile',
-                ),
-              ],
-            ),
-            //todo وحبيت اروح لمكان تاني في الشاشه ارجع الاقي مكانه مرجع من الاول  in home ده عشان انا في
-            body: IndexedStack(
-              index: cubit.currentIndex,
-              children: cubit.screens,
-            ),
+        return Scaffold(
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: cubit.currentIndex,
+            type: BottomNavigationBarType.fixed,
+            onTap: (index) {
+              return cubit.changeBottomNavBar(index);
+            },
+            selectedItemColor: ColorManager.red,
+            unselectedItemColor: ColorManager.white,
+            backgroundColor: ColorManager.baseColor,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'Search',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.grid_view_rounded),
+                label: 'Categories',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                label: 'Profile',
+              ),
+            ],
+          ),
+          //todo وحبيت اروح لمكان تاني في الشاشه ارجع الاقي مكانه مرجع من الاول  in home ده عشان انا في
+          body: IndexedStack(
+            index: cubit.currentIndex,
+            children: cubit.screens,
           ),
         );
       },
     );
   }
 }
+//PopScope(
+//canPop: false,
+//           onPopInvoked: (didPop) {
+//             if (didPop) return;
+//             if (Navigator.of(context).canPop()) {
+//               Navigator.of(context).pop();
+//               return;
+//             }
+//             if (cubit.currentIndex != 0) {
+//               cubit.changeBottomNavBar(0);
+//               return;
+//             }
+//             Navigator.of(context).maybePop();
+//           },

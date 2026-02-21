@@ -16,8 +16,8 @@ void main() async {
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
-   Constants.uId=await CacheHelper.getData(key: 'uId')??'';
-  runApp( AppRoot(uId:Constants.uId,));
+  Constants.isSeen = await CacheHelper.getData(key: 'isSeen') ?? false;
+  Constants.uId = await CacheHelper.getData(key: 'uId') ?? '';
+  runApp(AppRoot(uId: Constants.uId, isSeen: Constants.isSeen));
 }
 
-// 4167b8eadc90545c75d2aa1c Recovery Phrase in dark web

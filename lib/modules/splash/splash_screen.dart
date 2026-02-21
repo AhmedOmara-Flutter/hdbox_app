@@ -11,8 +11,9 @@ import '../onboarding/on_boarding_slides_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   final String uId;
+  final bool isSeen ;
 
-  const SplashScreen({super.key, required this.uId});
+  const SplashScreen({super.key, required this.uId, required this.isSeen});
 
   @override
   State<SplashScreen> createState() => _HDSplashScreenState();
@@ -49,6 +50,7 @@ class _HDSplashScreenState extends State<SplashScreen>
 
       // todo ودي كمان من غيرها emulator مش هيشتغل
       if (!mounted) return;
+
       Future.delayed(Duration(milliseconds: 4000), () {
         if (widget.uId.isNotEmpty) {
           navigateTo(context, MoviesHomeLayout(), isReplacement: true);

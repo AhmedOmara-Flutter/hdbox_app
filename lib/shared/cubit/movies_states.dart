@@ -3,9 +3,11 @@ abstract class MoviesState {}
 class InitialState extends MoviesState {}
 
 class ChangeBottomNavBarState extends MoviesState {}
+
 class ChangeCarouselState extends MoviesState {}
 
 class ClearSearchFieldState extends MoviesState {}
+
 class ChangeOnBoardingSlidesState extends MoviesState {}
 
 class MoviesLoadedState extends MoviesState {}
@@ -307,3 +309,25 @@ class ChangeWatchListErrorState extends MoviesState {
 }
 
 class ChangeWatchListLocalState extends MoviesState {}
+
+class UpdateProfileLoadingState extends MoviesState {}
+
+class UpdateProfileSuccessState extends MoviesState {}
+
+class UpdateProfileErrorState extends MoviesState {
+  final String error;
+
+  UpdateProfileErrorState({required this.error});
+}
+
+class GetProfileImageCanceledState extends MoviesState {}
+
+class GetProfileImageSuccessState extends MoviesState {}
+
+class GetProfileImageErrorState extends MoviesState {}
+
+class UploadProfileImageLoadingState extends MoviesState {}
+
+class UploadProfileImageSuccessState extends MoviesState {}
+
+class UploadProfileImageErrorState extends MoviesState {}

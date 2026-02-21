@@ -196,7 +196,13 @@ class HomeScreen extends StatelessWidget {
                   builder: (context) => MoviesHorizontalSection(
                     title: 'Top Rated',
                     onSeeAll: () {
-                      navigateTo(context, WatchlistScreen());
+                      navigateTo(
+                        context,
+                        SeeAllScreen(
+                          title: 'Top Rated Movies',
+                          movies: cubit.topRatedModel!.results!,
+                        ),
+                      );
                     },
                     movies: cubit.topRatedModel!.results!,
                   ),
@@ -222,28 +228,32 @@ class HomeScreen extends StatelessWidget {
                             shrinkWrap: true,
                             padding: EdgeInsets.symmetric(horizontal: 10.0),
                             scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index){
-                              final movies=cubit.watchlist[index];
+                            itemBuilder: (context, index) {
+                              final movies = cubit.watchlist[index];
                               return BuildMovieCard(
                                 onTap: () {
-                                  if(movies.mediaType=='movie'){
+                                  if (movies.mediaType == 'movie') {
                                     navigateTo(
                                       context,
-                                      FullDetailsMoviesScreen(movieId:movies.movieId!),
+                                      FullDetailsMoviesScreen(
+                                        movieId: movies.movieId!,
+                                      ),
                                     );
-                                  }else if(movies.mediaType=='tv'){
+                                  } else if (movies.mediaType == 'tv') {
                                     navigateTo(
                                       context,
-                                      FullDetailsTvMoviesScreen(movieId:movies.movieId!),
+                                      FullDetailsTvMoviesScreen(
+                                        movieId: movies.movieId!,
+                                      ),
                                     );
                                   }
                                 },
                                 image:
-                                movies.posterPath ??
+                                    movies.posterPath ??
                                     movies.backdropPath ??
                                     '',
                               );
-                            } ,
+                            },
                             separatorBuilder: (context, index) =>
                                 SizedBox(width: 10.0),
                             itemCount: cubit.watchlist.length,

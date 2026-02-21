@@ -8,8 +8,9 @@ import '../shared/styles/colors.dart';
 
 class AppRoot extends StatelessWidget {
   final String uId;
+  final bool isSeen;
 
-  const AppRoot({super.key, required this.uId});
+  const AppRoot({super.key, required this.uId, required this.isSeen});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class AppRoot extends StatelessWidget {
           hoverColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        home: SplashScreen(uId: uId),
+        home: SplashScreen(uId: uId,isSeen: isSeen,),
       ),
     );
   }

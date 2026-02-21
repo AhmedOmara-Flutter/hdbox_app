@@ -10,11 +10,14 @@ import '../../shared/components/cards/build_onboarding_card.dart';
 import '../../shared/components/utils/function.dart';
 import '../../shared/cubit/movies_cubit.dart';
 import '../../shared/cubit/movies_states.dart';
+import '../../shared/network/local/cache_helper.dart';
 import '../../shared/styles/colors.dart';
 import 'get_started_screen.dart';
 
 class OnBoardingSlidesScreen extends StatelessWidget {
-  const OnBoardingSlidesScreen({super.key});
+  OnBoardingSlidesScreen({super.key});
+
+  bool isSeen = true;
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +101,13 @@ class OnBoardingSlidesScreen extends StatelessWidget {
                             horizontal: 25.0,
                           ),
                           child: GestureDetector(
-                            onTap: () {
+                            onTap: () async{
+                              await CacheHelper.saveData(
+                                key: 'isSeen',
+                                value: isSeen,
+                              );
                               navigateTo(context, GetStartedScreen());
+
                             },
                             child: Text('skip', style: style(15.0)),
                           ),
@@ -142,7 +150,15 @@ class OnBoardingSlidesScreen extends StatelessWidget {
                           child: MaterialButton(
                             onPressed: () {
                               if (cubit.isLast) {
-                                navigateTo(context, GetStartedScreen(),isReplacement: true);
+                                CacheHelper.saveData(
+                                  key: 'isSeen',
+                                  value: isSeen,
+                                );
+                                navigateTo(
+                                  context,
+                                  GetStartedScreen(),
+                                  isReplacement: true,
+                                );
                               } else {
                                 cubit.pageController.nextPage(
                                   duration: Duration(milliseconds: 300),

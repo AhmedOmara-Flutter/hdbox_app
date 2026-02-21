@@ -1,13 +1,18 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hdbox_app/modules/onboarding/get_started_screen.dart';
+import 'package:hdbox_app/modules/profile/update_profile_screen.dart';
+import 'package:hdbox_app/shared/components/constants.dart';
 import 'package:hdbox_app/shared/components/effects/build_shimmer.dart';
 import 'package:hdbox_app/shared/components/utils/function.dart';
 import 'package:hdbox_app/shared/cubit/movies_cubit.dart';
 import 'package:hdbox_app/shared/cubit/movies_states.dart';
 import 'package:hdbox_app/shared/styles/colors.dart';
+import '../../shared/components/empty_state/profile_shimmer.dart';
+import '../../shared/components/lists/build_profile_option_button.dart';
 import '../../shared/network/local/cache_helper.dart';
 import '../watchlist/watchlist_screen.dart';
 
@@ -36,57 +41,69 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         // Profile Image
-                        CircleAvatar(
-                          backgroundColor: Color(0xff131313),
-                          backgroundImage: NetworkImage(model!.image!),
-                          radius: 55.0,
+                        Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Color(0xff131313),
+                              backgroundImage: NetworkImage('${model!.image}'),
+                              radius: 55.0,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  navigateTo(
+                                    context,
+                                    UpdateProfileScreen(userModel: model),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 13.0,
+                                  backgroundColor: ColorManager.red,
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: ColorManager.white,
+                                    size: 16.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: 15),
                         // Username
-                        Text(model.name!.toUpperCase(), style: style(17.0)),
+                        Text('${model.name}'.toUpperCase(), style: style(17.0)),
                         SizedBox(height: 5.0),
                         // Email
-                        Text(model.email!.toLowerCase(), style: style(13.0)),
+                        Text('${model.email}'.toLowerCase(), style: style(13.0)),
                       ],
                     ),
                   ),
-                  fallback: (context) => Container(
-                    margin: EdgeInsets.only(top: 20.0),
-                    height: 200.0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ClipOval(child: BuildShimmer(height: 110, width: 110)),
-                        SizedBox(height: 15.0),
-                        BuildShimmer(height: 12.0, width: 150.0),
-                        SizedBox(height: 10.0),
-                        BuildShimmer(height: 12.0, width: 200.0),
-                      ],
-                    ),
-                  ),
+                  fallback: (context) => ProfileShimmer(),
                 ),
                 ListView(
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   children: [
-                    _buildOption(
+                    BuildProfileOptionButton(
                       icon: Icons.settings,
                       title: "Settings",
                       onPressed: () {},
                     ),
-                    _buildOption(
+                    BuildProfileOptionButton(
                       icon: Icons.lock,
                       title: "Privacy",
                       onPressed: () {},
                     ),
-                    _buildOption(
+                    BuildProfileOptionButton(
                       icon: Icons.movie,
                       title: "My Watchlist",
                       onPressed: () {
                         navigateTo(context, WatchlistScreen());
                       },
                     ),
-                    _buildOption(
+                    BuildProfileOptionButton(
                       icon: Icons.help_outline,
                       title: "Help & Support",
                       onPressed: () {},
@@ -122,27 +139,28 @@ class ProfileScreen extends StatelessWidget {
                                   ),
                                 ),
                                 TextButton(
-                                  onPressed: () {
-                                    CacheHelper.removeData(key: 'uId').then((
-                                      value,
-                                    ) {
-                                      if (value == true) {
-                                        showSnakeBar(
-                                          context: context,
-                                          label: 'Logout Successfully',
-                                          color: Colors.green,
-                                        );
-                                      }
-                                      cubit.resetCurrentIndex();
-                                      cubit.resetUserModel();
-                                      cubit.userModel = null;
+                                  onPressed: () async {
+                                    await FirebaseAuth.instance.signOut();
 
-                                      navigateTo(
-                                        context,
-                                        GetStartedScreen(),
-                                        isReplacement: true,
-                                      );
-                                    });
+                                    // 2️⃣ Clear local data
+                                    await CacheHelper.removeData(key: 'uId');
+                                    Constants.uId = '';
+
+                                    // 3️⃣ Reset app state
+                                    cubit.resetUserModel();
+                                    cubit.resetCurrentIndex();
+                                    // 4️⃣ Feedback
+                                    showSnakeBar(
+                                      context: context,
+                                      label: 'Logout Successfully',
+                                      color: Colors.green,
+                                    );
+                                    // 5️⃣ Navigate
+                                    navigateTo(
+                                      context,
+                                      GetStartedScreen(),
+                                      isReplacement: true,
+                                    );
                                   },
                                   child: Text(
                                     "Log Out",
@@ -155,11 +173,7 @@ class ProfileScreen extends StatelessWidget {
                         },
                         child: Text(
                           "Log Out",
-                          style: GoogleFonts.poppins(
-                            color: Colors.redAccent,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: style(18.0, color: ColorManager.red),
                         ),
                       ),
                     ),
@@ -171,43 +185,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildOption({
-    required IconData icon,
-    required String title,
-    required VoidCallback onPressed,
-  }) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 18),
-      decoration: BoxDecoration(
-        color: const Color(0xff1a1a1a),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: InkWell(
-        onTap: onPressed,
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 24),
-            const SizedBox(width: 15),
-            Text(
-              title,
-              style: GoogleFonts.poppins(color: Colors.white, fontSize: 15),
-            ),
-            const Spacer(),
-            IconButton(
-              icon: Icon(
-                Icons.arrow_forward_ios,
-                color: Colors.white38,
-                size: 16,
-              ),
-              onPressed: onPressed,
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

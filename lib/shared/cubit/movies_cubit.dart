@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hdbox_app/models/watchlist_model.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../models/episode_model.dart';
 import '../../models/full_details_model/credits_details_model.dart';
 import '../../models/full_details_model/images_details_model.dart';
@@ -30,6 +35,7 @@ import '../../modules/profile/profile_screen.dart';
 import '../../modules/search/search_screen.dart';
 import '../components/constants.dart';
 import '../network/end_points.dart';
+import '../network/local/cache_helper.dart';
 import '../network/remote/dio_helper.dart';
 import 'movies_states.dart';
 
@@ -58,7 +64,8 @@ class MoviesCubit extends Cubit<MoviesState> {
     AppBar(backgroundColor: Colors.purple),
     AppBar(backgroundColor: Colors.green),
   ];
-//todo
+
+  //todo
   void changeCarousel(int index) {
     indexIteration = index;
     emit(ChangeCarouselState());
@@ -605,7 +612,6 @@ class MoviesCubit extends Cubit<MoviesState> {
           .then((value) {
             userModel = UserModel.fromJson(value.data()!);
             emit(GetUserDataSuccessState());
-            print(value.data()!.length);
           })
           .catchError((error) {
             emit(GetUserDataErrorState(error: error.toString()));
@@ -623,11 +629,13 @@ class MoviesCubit extends Cubit<MoviesState> {
     currentIndex = 0;
     emit(ResetCurrentIndexState());
   }
-void clearSearchField(){
-    searchText='';
-    multiSearchModel=null;
+
+  void clearSearchField() {
+    searchText = '';
+    multiSearchModel = null;
     emit(ClearSearchFieldState());
-}
+  }
+
   ////////////////////////////////Add to Watchlist ///////////////////////////////
   List<WatchlistModel> watchlist = [];
   List<WatchlistModel> filteredWatchList = [];
@@ -679,20 +687,20 @@ void clearSearchField(){
         .doc(Constants.uId)
         .collection('watchlist')
         .orderBy('addedAt', descending: true)
-        .snapshots().listen((value){
-      watchlist.clear();
+        .snapshots()
+        .listen((value) {
+          watchlist.clear();
 
-      value.docs.forEach((element) {
-        final model = WatchlistModel.fromJson(element.data());
-        watchlist.add(model);
-        //todo
-        watchlistMap['${model.mediaType}_${model.movieId}'] = true;
-        print(watchlistMap);
-      });
-      filteredWatchListFun(type: selectedType);
-      isWatchlistLoading = false;
-      emit(GetWatchListSuccessState());
-    });
+          value.docs.forEach((element) {
+            final model = WatchlistModel.fromJson(element.data());
+            watchlist.add(model);
+            //todo
+            watchlistMap['${model.mediaType}_${model.movieId}'] = true;
+          });
+          filteredWatchListFun(type: selectedType);
+          isWatchlistLoading = false;
+          emit(GetWatchListSuccessState());
+        });
   }
 
   void filteredWatchListFun({required String type}) {
@@ -765,5 +773,70 @@ void clearSearchField(){
       watchlistMap[key] = isInWatchList;
       emit(ChangeWatchListErrorState(error: e.toString()));
     }
+  }
+
+  Future<void> updateData({required String name, required String email}) async {
+    emit(UpdateProfileLoadingState());
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(Constants.uId)
+        .update({'name': name, 'email': email})
+        .then((value) {
+          emit(UpdateProfileSuccessState());
+          getUserFromFirebase();
+        })
+        .catchError((error) {
+          emit(UpdateProfileErrorState(error: error.toString()));
+          print(error.toString());
+        });
+  }
+
+  Future<void> signOut() async {
+    // 1️⃣ Logout from Firebase
+  }
+
+  final imagePicker = ImagePicker();
+  File? profileImage;
+
+  Future<void> getProfileImage() async {
+    await imagePicker
+        .pickImage(source: ImageSource.gallery)
+        .then((value) {
+          if (value != null) {
+            profileImage = File(value.path);
+            print(profileImage);
+            emit(GetProfileImageSuccessState());
+          } else {
+            emit(GetProfileImageCanceledState());
+          }
+        })
+        .catchError((error) {
+          emit(GetProfileImageErrorState());
+        });
+  }
+
+  Future<void> uploadProfileImage() async {
+    emit(UploadProfileImageLoadingState());
+    await FirebaseStorage.instance
+        .ref()
+        .child('users/${Uri.file(profileImage!.path).pathSegments.last}')
+        .putFile(profileImage!)
+        .then((value) {
+          print('val1 :$value');
+          value.ref.getDownloadURL().then((value){
+            print(value);
+            emit(UploadProfileImageSuccessState());
+            print('val2 :$value');
+          }).catchError((error){
+            emit(UploadProfileImageErrorState());
+            print('error1 :$error');
+
+          });
+    })
+        .catchError((error) {
+      emit(UploadProfileImageErrorState());
+      print('error2 :$error');
+
+    });
   }
 }

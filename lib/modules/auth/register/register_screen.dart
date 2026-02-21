@@ -155,7 +155,7 @@ class RegisterScreen extends StatelessWidget {
                                   ),
                                   InkWell(
                                     onTap: () {
-                                      navigateTo(context, LoginScreen(),isReplacement: true);
+                                      navigateTo(context, LoginScreen());
                                     },
                                     child: Text(
                                       'Login',
