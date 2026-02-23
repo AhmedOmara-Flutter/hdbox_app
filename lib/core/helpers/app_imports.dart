@@ -1,0 +1,120 @@
+export 'dart:io';
+export 'package:animated_text_kit/animated_text_kit.dart';
+export 'package:bloc/bloc.dart';
+export 'package:cached_network_image/cached_network_image.dart';
+export 'package:carousel_slider/carousel_slider.dart';
+export 'package:cloud_firestore/cloud_firestore.dart';
+export 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+export 'package:dio/dio.dart';
+export 'package:firebase_auth/firebase_auth.dart';
+export 'package:firebase_core/firebase_core.dart';
+export 'package:firebase_storage/firebase_storage.dart';
+export 'package:flutter/material.dart';
+export 'package:flutter/services.dart';
+export 'package:flutter_bloc/flutter_bloc.dart';
+export 'package:google_fonts/google_fonts.dart';
+export 'package:image_picker/image_picker.dart';
+export 'package:readmore/readmore.dart';
+export 'package:shared_preferences/shared_preferences.dart';
+export 'package:shimmer/shimmer.dart';
+export 'package:smooth_page_indicator/smooth_page_indicator.dart';
+export 'package:url_launcher/url_launcher.dart';
+export 'package:hdbox_app/firebase_options.dart';
+export 'package:hdbox_app/core/src/src.dart';
+
+/// resources
+
+export 'package:hdbox_app/core/resources/assets_manager.dart';
+export 'package:hdbox_app/core/resources/color_manager.dart';
+export 'package:hdbox_app/core/resources/font_manager.dart';
+export 'package:hdbox_app/core/resources/string_manager.dart';
+export 'package:hdbox_app/core/resources/values_manager.dart';
+export 'package:hdbox_app/core/resources/constants.dart';
+
+
+/// layout
+
+export 'package:hdbox_app/features/layout/view/movies_home_layout.dart';
+
+/// models
+
+export 'package:hdbox_app/core/models/episode_model.dart';
+export 'package:hdbox_app/core/models/multi_search_model.dart';
+export 'package:hdbox_app/core/models/onboarding_model.dart';
+export 'package:hdbox_app/core/models/popular_network_model.dart';
+export 'package:hdbox_app/core/models/user_model.dart';
+export 'package:hdbox_app/core/models/watchlist_model.dart';
+
+/// modules
+
+export 'package:hdbox_app/features/auth/widgets/get_login_content.dart';
+export 'package:hdbox_app/features/auth/widgets/get_register_content.dart';
+export 'package:hdbox_app/features/auth/controllers/login_controller/login_cubit.dart';
+export 'package:hdbox_app/features/auth/controllers/login_controller/login_states.dart';
+export 'package:hdbox_app/features/auth/controllers/register_controller/register_cubit.dart';
+export 'package:hdbox_app/features/auth/controllers/register_controller/register_states.dart';
+export 'package:hdbox_app/features/auth/view/login_screen.dart';
+export 'package:hdbox_app/features/auth/view/register_screen.dart';
+export 'package:hdbox_app/features/auth/widgets/auth_footer.dart';
+export 'package:hdbox_app/features/auth/widgets/custom_back_button.dart';
+export 'package:hdbox_app/features/auth/widgets/get_background_image.dart';
+export 'package:hdbox_app/features/auth/widgets/get_blurred_overlay.dart';
+export 'package:hdbox_app/features/auth/widgets/get_dark_gradient_bottom_overlay.dart';
+export 'package:hdbox_app/features/categories/view/categories_screen.dart';
+export 'package:hdbox_app/features/full_details/full_details_movies_screen.dart';
+export 'package:hdbox_app/features/full_details/full_details_tv_movies_screen.dart';
+export 'package:hdbox_app/features/full_details/genres_details_screen.dart';
+export 'package:hdbox_app/features/full_details/network_details_screen.dart';
+export 'package:hdbox_app/features/full_details/person_data_movies.dart';
+export 'package:hdbox_app/features/full_details/photos_screen.dart';
+export 'package:hdbox_app/features/full_details/see_all_screen.dart';
+export 'package:hdbox_app/features/full_details/see_all_tv_images_screen.dart';
+export 'package:hdbox_app/features/full_details/trailer_screen.dart';
+export 'package:hdbox_app/features/full_details/video_details_screen.dart';
+export 'package:hdbox_app/features/home/view/home_screen.dart';
+export 'package:hdbox_app/features/onboarding/view/get_started_screen.dart';
+export 'package:hdbox_app/features/onboarding/view/on_boarding_slides_screen.dart';
+export 'package:hdbox_app/features/profile/view/profile_screen.dart';
+export 'package:hdbox_app/features/profile/widgets/update_profile_screen.dart';
+export 'package:hdbox_app/features/search/widgets/search_info_row.dart';
+export 'package:hdbox_app/features/search/view/search_screen.dart';
+export 'package:hdbox_app/features/search/widgets/top_search_item.dart';
+export 'package:hdbox_app/features/splash/splash_screen.dart';
+export 'package:hdbox_app/features/watchlist/watchlist_screen.dart';
+
+/// shared
+
+export 'package:hdbox_app/core/network/remote/dio_helper.dart';
+export 'package:hdbox_app/core/widgets/buttons/action_button_item.dart';
+export 'package:hdbox_app/core/widgets/buttons/build_action_button_row.dart';
+export 'package:hdbox_app/core/widgets/buttons/build_play_button.dart';
+export 'package:hdbox_app/core/widgets/buttons/segmented_tab_selector.dart';
+export 'package:hdbox_app/core/widgets/cards/build_cast_item.dart';
+export 'package:hdbox_app/core/widgets/cards/build_episode_card.dart';
+export 'package:hdbox_app/core/widgets/cards/build_movie_card.dart';
+export 'package:hdbox_app/core/widgets/cards/build_network_card.dart';
+export 'package:hdbox_app/core/widgets/cards/build_onboarding_card.dart';
+export 'package:hdbox_app/core/widgets/cards/build_photos_header_card.dart';
+export 'package:hdbox_app/core/widgets/cards/build_season_card.dart';
+export 'package:hdbox_app/core/widgets/cards/build_watchlist_card.dart';
+export 'package:hdbox_app/core/widgets/dialogs/show_image_dialog.dart';
+export 'package:hdbox_app/core/widgets/effects/build_shimmer.dart';
+export 'package:hdbox_app/core/widgets/empty_state/horizontal_movies_shimmer.dart';
+export 'package:hdbox_app/core/widgets/empty_state/no_data_view.dart';
+export 'package:hdbox_app/core/widgets/empty_state/profile_shimmer.dart';
+export 'package:hdbox_app/core/widgets/forms/build_text_form_field.dart';
+export 'package:hdbox_app/core/widgets/layout/build_appbar_screens.dart';
+export 'package:hdbox_app/core/widgets/layout/build_full_back.dart';
+export 'package:hdbox_app/core/widgets/layout/build_image_screen.dart';
+export 'package:hdbox_app/core/widgets/layout/section_header.dart';
+export 'package:hdbox_app/core/widgets/lists/build_profile_option_button.dart';
+export 'package:hdbox_app/core/widgets/lists/build_snackbar.dart';
+export 'package:hdbox_app/core/widgets/lists/build_video_bottom_sheet.dart';
+export 'package:hdbox_app/core/widgets/lists/movie_carousel_slider.dart';
+export 'package:hdbox_app/core/widgets/lists/movies_horizontal_section.dart';
+export 'package:hdbox_app/core/widgets/utils/function.dart';
+export 'package:hdbox_app/core/cubit/bloc_observer.dart';
+export 'package:hdbox_app/core/cubit/movies_cubit.dart';
+export 'package:hdbox_app/core/cubit/movies_states.dart';
+export 'package:hdbox_app/core/network/local/cache_helper.dart';
+export 'package:hdbox_app/features/search/controllers/search_cubit.dart';
